@@ -1,0 +1,39 @@
+.audio-player-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    background-color: #f0f0f0; /* Background container */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.audio-player-wrapper {
+    width: 100%;
+    max-width: 500px; /* Maksimal lebar player */
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden; /* Memastikan elemen tidak keluar dari border */
+}
+
+.audio-player {
+    width: 100%;
+    border-radius: 8px;
+    outline: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.audio-player::-webkit-media-controls-panel {
+    background-color: #063b3e; /* Kontrol panel berwarna hijau gelap */
+}
+
+.audio-player::-webkit-media-controls-play-button {
+    background-color: #4caf50; /* Tombol play hijau */
+    border-radius: 50%;
+}
+
+.audio-player::-webkit-media-controls-volume-slider {
+    background-color: #e0e0e0;
+    border-radius: 5px;
+}

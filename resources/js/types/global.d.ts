@@ -6,6 +6,9 @@ import { PageProps as AppPageProps } from './';
 declare global {
     interface Window {
         axios: AxiosInstance;
+        Laravel: {
+            asset: (path: string) => string;
+          };
     }
 
     /* eslint-disable no-var */
