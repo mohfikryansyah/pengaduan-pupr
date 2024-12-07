@@ -323,7 +323,7 @@ function Header() {
                 className="mt-8 text-white py-4 text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
             >
                 <h1 className="text-4xl md:text-6xl font-bold">
-                    <span className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-green-300 to-yellow-300">
+                    <span className="md:text-7xl text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-green-300 to-yellow-300">
                         Layanan Pengaduan
                     </span>
                 </h1>
@@ -644,29 +644,62 @@ const VoiceRecorder = ({
         null
     );
 
+    // const startRecording = async () => {
+    //     setAudioURL(null);
+
+    //     const stream = await navigator.mediaDevices.getUserMedia({
+    //         audio: true,
+    //     });
+    //     const recorder = new MediaRecorder(stream);
+    //     setMediaRecorder(recorder);
+
+    //     recorder.start();
+    //     setIsRecording(true);
+
+    //     const audioChunks: Blob[] = [];
+    //     recorder.ondataavailable = (event) => {
+    //         audioChunks.push(event.data);
+    //     };
+
+    //     recorder.onstop = () => {
+    //         const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+    //         onAudioReady(audioBlob);
+    //         const url = URL.createObjectURL(audioBlob);
+    //         setAudioURL(url);
+    //     };
+    // };
+
     const startRecording = async () => {
         setAudioURL(null);
-
-        const stream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-        });
-        const recorder = new MediaRecorder(stream);
-        setMediaRecorder(recorder);
-
-        recorder.start();
-        setIsRecording(true);
-
-        const audioChunks: Blob[] = [];
-        recorder.ondataavailable = (event) => {
-            audioChunks.push(event.data);
-        };
-
-        recorder.onstop = () => {
-            const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-            onAudioReady(audioBlob);
-            const url = URL.createObjectURL(audioBlob);
-            setAudioURL(url);
-        };
+    
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+            });
+            const recorder = new MediaRecorder(stream, { 
+                mimeType: 'audio/mp4'
+            });
+            setMediaRecorder(recorder);
+    
+            recorder.start();
+            setIsRecording(true);
+    
+            const audioChunks: Blob[] = [];
+            recorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+    
+            recorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: "audio/mp4" });
+                onAudioReady(audioBlob);
+                const url = URL.createObjectURL(audioBlob);
+                setAudioURL(url);
+                
+                stream.getTracks().forEach(track => track.stop());
+            };
+        } catch (error) {
+            toast.error("Error starting recording");
+        }
     };
 
     const stopRecording = () => {
