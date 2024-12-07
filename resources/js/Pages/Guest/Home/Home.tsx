@@ -44,6 +44,8 @@ import { motion, Variants } from "framer-motion";
 import { Boxes } from "@/Components/ui/background-boxes";
 import { cn } from "@/lib/utils";
 import { FlipWords } from "@/Components/ui/flip-words";
+import { BackgroundBeamsWithCollision } from "@/Components/ui/background-beams-with-collision";
+import { HeroParallaxDemo } from "./HeroParallax";
 
 export default function Home() {
     const words = [
@@ -56,27 +58,30 @@ export default function Home() {
 
     return (
         <Main>
-            <div className="h-[60vh] relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
-                <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
-
-                <Boxes />
-                <div className="h-[40rem] z-[50] -mt-10 min-w-screen-md flex justify-center items-center px-4">
-                    <div className="text-5xl mx-auto text-center space-y-2 font-semibold text-white dark:text-neutral-400">
-                        <p className="text-xl text-neutral-300 font-normal relative">
-                            Sampaikan laporan Anda langsung kepada instansi
-                            pemerintah berwenang
-                        </p>
-                        <h1>
-                            Layanan Pengaduan <br />
-                        </h1>
-                        <FlipWords
-                            words={words}
-                            className="text-yellow-500 px-0"
-                        />
+            <BackgroundBeamsWithCollision>
+                <div className="bg-grid-white/[0.2] relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
+                    <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
+                    <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-slate-900 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+                    {/* <Boxes /> */}
+                    <div className="h-[40rem] z-[50] min-w-screen-md flex justify-center items-center px-4">
+                        <div className="md:text-5xl text-4xl mt-20 mx-auto text-center space-y-2 font-semibold text-white dark:text-neutral-400">
+                            <p className="md:text-xl md:-mt-32 -mt-16 text-lg text-neutral-300 font-normal relative">
+                                Sampaikan laporan Anda langsung kepada instansi
+                                pemerintah berwenang
+                            </p>
+                            <h1>
+                                Layanan Pengaduan <br />
+                            </h1>
+                            <FlipWords
+                                words={words}
+                                className="text-yellow-500 px-0"
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
+            </BackgroundBeamsWithCollision>
             <FormPengaduan />
+            <HeroParallaxDemo />
             {/* <Header /> */}
         </Main>
     );
@@ -163,21 +168,6 @@ const MyMapComponent = ({ onCoordinatesChange }: MyMapComponentProps) => {
     );
 };
 
-const cardVariants: Variants = {
-    offscreen: {
-        y: 300,
-    },
-    onscreen: {
-        y: 50,
-        // rotate: -10,
-        transition: {
-            type: "tween",
-            bounce: 0.4,
-            duration: 1,
-        },
-    },
-};
-
 const formSchema = z.object({
     name: z.string().min(2).max(50),
     message: z.string().nonempty({ message: "Tidak boleh kosong" }),
@@ -212,6 +202,37 @@ function FormPengaduan() {
         });
     }
 
+    const [isMediumScreen, setIsMediumScreen] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMediumScreen(window.innerWidth >= 768); // md di Tailwind ≈ 768px
+        };
+
+        // Set initial state
+        handleResize();
+
+        // Listener resize event
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    const cardVariants: Variants = {
+        offscreen: {
+            y: isMediumScreen ? 300 : 100,
+        },
+        onscreen: {
+            y: 50,
+            // rotate: -10,
+            transition: {
+                type: "tween",
+                bounce: 0.4,
+                duration: 1,
+            },
+        },
+    };
+
     const handleCoordinatesChange = (coords: Coordinates) => {
         form.setValue("latitude", coords.lat);
         form.setValue("longitude", coords.lng);
@@ -219,13 +240,13 @@ function FormPengaduan() {
 
     return (
         <motion.div
-            className="relative min-h-[90vh] p-4 md:p-0 z-[50]"
+            className="relative min-h-[90vh] p-4 md:p-0 z-[999]"
             initial="offscreen"
             whileInView="onscreen"
             viewport={{ once: true, amount: 0.6 }}
         >
             <motion.div
-                className="mx-auto -mt-[12rem] lg:max-w-screen-lg w-full z-[1] bg-white shadow-xl p-6 rounded-2xl"
+                className="mx-auto md:-mt-[12rem] -mt-[7rem] lg:max-w-screen-lg w-full z-[1] bg-white shadow-xl p-6 rounded-2xl"
                 variants={cardVariants}
             >
                 <div className="w-full p-4 rounded-lg bg-slate-900 flex items-center justify-between">
