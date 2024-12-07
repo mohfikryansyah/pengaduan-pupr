@@ -452,7 +452,7 @@ function FormPengaduan() {
             viewport={{ once: true, amount: 0.5 }}
         >
             <motion.div
-                className="mx-auto -mt-[25.2rem] lg:max-w-screen-lg w-[calc(100%-32px)] z-[1] bg-white shadow-xl p-6 rounded-2xl"
+                className="mx-auto -mt-[25.2rem] lg:max-w-screen-lg w-full z-[1] bg-white shadow-xl p-6 rounded-2xl"
                 variants={cardVariants}
             >
                 <div className="w-full p-4 rounded-lg bg-[#063b3e] flex items-center justify-between">
@@ -662,7 +662,7 @@ const VoiceRecorder = ({
         };
 
         recorder.onstop = () => {
-            const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+            const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
             onAudioReady(audioBlob);
             const url = URL.createObjectURL(audioBlob);
             setAudioURL(url);
