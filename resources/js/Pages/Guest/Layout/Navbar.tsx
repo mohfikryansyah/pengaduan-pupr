@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link } from "@inertiajs/react";
 import {
     Sheet,
     SheetContent,
@@ -6,18 +6,16 @@ import {
     SheetHeader,
     SheetTitle,
     SheetTrigger,
-} from "@/Components/ui/sheet"
-import { Button } from "@/Components/ui/button"
-import { MenuIcon } from 'lucide-react';
-
-
+} from "@/Components/ui/sheet";
+import { Button } from "@/Components/ui/button";
+import { MenuIcon } from "lucide-react";
+import '../../../../css/style.css';
 
 export default function Navbar() {
-
     return (
-        <nav className="absolute w-full z-50 top-0 border-gray-200 dark:bg-gray-900 lg:px-12 px-6">
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-6">
-                <a
+        <nav className="fixed w-full backdrop-filter bg-white/80 z-[100] top-0 border-gray-200 dark:bg-gray-900 lg:px-12 px-6">
+            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-3">
+                <Link
                     href="https://flowbite.com/"
                     className="flex items-center space-x-3 rtl:space-x-reverse"
                 >
@@ -27,21 +25,15 @@ export default function Navbar() {
                         alt="Flowbite Logo"
                     />
                     <div className="-space-y-1">
-
-                        <p className="self-center text-2xl font-semibold whitespace-nowrap text-white">
+                        <p className="self-center text-2xl font-bold whitespace-nowrap text-gray-800">
                             DISPERKIM
                         </p>
-                        <p className="self-center text-md font-semibold whitespace-nowrap text-white">
+                        <p className="self-center text-md font-bold whitespace-nowrap text-gray-800">
                             KOTA GORONTALO
                         </p>
                     </div>
-                </a>
-                <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                    <Link href={route('login')}
-                        className="text-white bg-transparent border font-medium rounded-lg text-md px-4 py-1.5 active:scale-90 duration-300 transform text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                        Login
-                    </Link>
+                </Link>
+                {/* <div className="md:hidden flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse"> */}
                     <Sheet>
                         <SheetTrigger asChild>
                             <Button
@@ -49,7 +41,7 @@ export default function Navbar() {
                                 size="icon"
                                 className="md:hidden bg-transparent"
                             >
-                                <MenuIcon className="h-6 w-6 text-white" />
+                                <MenuIcon className="h-6 w-6 text-gray-800" />
                                 <span className="sr-only">
                                     Toggle navigation menu
                                 </span>
@@ -68,20 +60,20 @@ export default function Navbar() {
                             </SheetHeader>
                         </SheetContent>
                     </Sheet>
-                </div>
+                {/* </div> */}
 
                 <div
                     className="hidden w-full md:block md:w-auto"
                     id="navbar-default"
                 >
-                    <ul className="font-medium -ml-[7rem] flex flex-col p-4 md:py-1 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 text-lg">
+                    <ul className="font-medium -ml-[7rem] flex flex-col p-4 md:py-1 mt-4 border border-gray-100 rounded-lg bg-gray-800 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 text-lg">
                         {/* <li>
                             <DropdownMenuDemo />
                         </li> */}
                         <li>
                             <Link
                                 href="/"
-                                className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-gray-50 md:p-0 dark:text-white md:dark:text-blue-500"
+                                className="block py-2 px-3 text-gray-800 bg-blue-700 rounded md:bg-transparent md:text-gray-800 md:p-0 dark:text-white md:dark:text-blue-500"
                                 aria-current="page"
                             >
                                 Home
@@ -90,7 +82,7 @@ export default function Navbar() {
                         <li>
                             <Link
                                 href="/"
-                                className="block py-2 px-3 text-gray-50 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                                className="block py-2 px-3 text-gray-800 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                             >
                                 About
                             </Link>
@@ -98,30 +90,136 @@ export default function Navbar() {
                         <li>
                             <Link
                                 href="/"
-                                className="block py-2 px-3 text-gray-50 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                                className="block py-2 px-3 text-gray-800 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                             >
                                 Services
                             </Link>
                         </li>
                         <li>
-                            <a
+                            <Link
                                 href="#"
-                                className="block py-2 px-3 text-gray-50 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                                className="block py-2 px-3 text-gray-800 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                             >
                                 Pricing
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a
+                            <Link
                                 href="#"
-                                className="block py-2 px-3 text-gray-50 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                                className="block py-2 px-3 text-gray-800 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                             >
                                 Contact
-                            </a>
+                            </Link>
+                        </li>
+                        <li className="active:scale-90 duration-300">
+                            <Link
+                                href={route("login")}
+                                className="text-white bg-slate-800 border font-medium rounded-xl text-md px-4 pt-1.5 pb-2 active:scale-90 duration-300 transform text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            >
+                                Login
+                            </Link>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-    )
-};
+
+        // <nav className="fixed z-[999] w-full bg-white border-gray-200 dark:bg-gray-900">
+        //     <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        //         <Link
+        //             href="https://flowbite.com/"
+        //             className="flex items-center space-x-3 rtl:space-x-reverse"
+        //         >
+        //             <img
+        //                 src="https://flowbite.com/docs/images/logo.svg"
+        //                 className="h-8"
+        //                 alt="Flowbite Logo"
+        //             />
+        //             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+        //                 Flowbite
+        //             </span>
+        //         </Link>
+        //         <button
+        //             data-collapse-toggle="navbar-default"
+        //             type="button"
+        //             className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-8000 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        //             aria-controls="navbar-default"
+        //             aria-expanded="false"
+        //         >
+        //             <span className="sr-only">Open main menu</span>
+        //             <svg
+        //                 className="w-5 h-5"
+        //                 aria-hidden="true"
+        //                 xmlns="http://www.w3.org/2000/svg"
+        //                 fill="none"
+        //                 viewBox="0 0 17 14"
+        //             >
+        //                 <path
+        //                     stroke="currentColor"
+        //                     stroke-linecap="round"
+        //                     stroke-linejoin="round"
+        //                     stroke-width="2"
+        //                     d="M1 1h15M1 7h15M1 13h15"
+        //                 />
+        //             </svg>
+        //         </button>
+        //         <div
+        //             className="hidden w-full md:block md:w-auto"
+        //             id="navbar-default"
+        //         >
+        //             <ul className="font-medium flex items-center flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-800 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+        //                 <li>
+        //                     <Link
+        //                         href="#"
+        //                         className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
+        //                         aria-current="page"
+        //                     >
+        //                         Home
+        //                     </Link>
+        //                 </li>
+        //                 <li>
+        //                     <Link
+        //                         href="#"
+        //                         className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+        //                     >
+        //                         About
+        //                     </Link>
+        //                 </li>
+        //                 <li>
+        //                     <Link
+        //                         href="#"
+        //                         className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+        //                     >
+        //                         Services
+        //                     </Link>
+        //                 </li>
+        //                 <li>
+        //                     <Link
+        //                         href="#"
+        //                         className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+        //                     >
+        //                         Pricing
+        //                     </Link>
+        //                 </li>
+        //                 <li>
+        //                     <Link
+        //                         href="#"
+        //                         className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+        //                     >
+        //                         Contact
+        //                     </Link>
+        //                 </li>
+        //                 <li className="">
+        //                     <Link
+        //                         href={route("login")}
+        //                         className="text-white hover:scale-90 bg-[#27272a] font-semibold rounded-lg text-md px-4 py-1.5 active:scale-90 duration-300 transform text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        //                     >
+        //                         Login
+        //                     </Link>
+        //                 </li>
+        //             </ul>
+        //         </div>
+        //     </div>
+        // </nav>
+    );
+}

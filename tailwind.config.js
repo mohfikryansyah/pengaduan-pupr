@@ -22,7 +22,9 @@ export default {
     	extend: {
     		fontFamily: {
     			sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-    			inter: ['Inter', ...defaultTheme.fontFamily.sans]
+    			inter: ['Inter', ...defaultTheme.fontFamily.sans],
+    			poppins: ['Poppins', ...defaultTheme.fontFamily.sans],
+    			manrope: ['Manrope', ...defaultTheme.fontFamily.sans],
     		},
     		borderRadius: {
     			lg: 'var(--radius)',

@@ -9,7 +9,7 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600|inter:400,500,600" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600|inter:400,500,600|manrope:400,500,600,700,800|poppins:400,500,600" rel="stylesheet" />
 
     <!-- Scripts -->
     @routes
@@ -18,7 +18,7 @@
     @inertiaHead
 </head>
 
-<body class="font-inter antialiased">
+<body class="font-manrope antialiased">
     @inertia
 </body>
 
