@@ -1,1 +1,0 @@
-import{j as r}from"./app-C8iCkmTH.js";import i from"./Navbar-lugZYLJK.js";import"./sheet-B2eHg7aY.js";import"./Combination-D5evQ1Js.js";import"./utils-WLy0RHGw.js";function p({children:t}){return r.jsxs(r.Fragment,{children:[r.jsx(i,{}),r.jsx("main",{children:t})]})}export{p as default};
