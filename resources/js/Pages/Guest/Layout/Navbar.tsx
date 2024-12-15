@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import {
     Sheet,
     SheetContent,
@@ -8,12 +8,14 @@ import {
     SheetTrigger,
 } from "@/Components/ui/sheet";
 import { Button } from "@/Components/ui/button";
-import { MenuIcon } from "lucide-react";
-import '../../../../css/style.css';
+import { ArrowRight, MenuIcon } from "lucide-react";
+import "../../../../css/style.css";
+import { PageProps } from "@/types";
 
 export default function Navbar() {
+    const { auth } = usePage<PageProps>().props;
     return (
-        <nav className="fixed w-full backdrop-filter bg-white/80 z-[100] top-0 border-gray-200 dark:bg-gray-900 lg:px-12 px-6">
+        <nav className="fixed w-full backdrop-filter bg-white/80 z-[51] top-0 border-gray-200 dark:bg-gray-900 lg:px-12 px-6">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-3">
                 <Link
                     href="https://flowbite.com/"
@@ -34,32 +36,29 @@ export default function Navbar() {
                     </div>
                 </Link>
                 {/* <div className="md:hidden flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse"> */}
-                    <Sheet>
-                        <SheetTrigger asChild>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                className="md:hidden bg-transparent"
-                            >
-                                <MenuIcon className="h-6 w-6 text-gray-800" />
-                                <span className="sr-only">
-                                    Toggle navigation menu
-                                </span>
-                            </Button>
-                        </SheetTrigger>
-                        <SheetContent side={"left"}>
-                            <SheetHeader>
-                                <SheetTitle>
-                                    Are you absolutely sure?
-                                </SheetTitle>
-                                <SheetDescription>
-                                    This action cannot be undone. This will
-                                    permanently // delete your account and
-                                    remove
-                                </SheetDescription>
-                            </SheetHeader>
-                        </SheetContent>
-                    </Sheet>
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="md:hidden bg-transparent"
+                        >
+                            <MenuIcon className="h-6 w-6 text-gray-800" />
+                            <span className="sr-only">
+                                Toggle navigation menu
+                            </span>
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent side={"left"}>
+                        <SheetHeader>
+                            <SheetTitle>Are you absolutely sure?</SheetTitle>
+                            <SheetDescription>
+                                This action cannot be undone. This will
+                                permanently // delete your account and remove
+                            </SheetDescription>
+                        </SheetHeader>
+                    </SheetContent>
+                </Sheet>
                 {/* </div> */}
 
                 <div
@@ -112,12 +111,35 @@ export default function Navbar() {
                             </Link>
                         </li>
                         <li className="active:scale-90 duration-300">
-                            <Link
+                            {auth.user ? (
+                                <Link
+                                    href={route("dashboard")}
+                                    className="text-white bg-slate-800 border font-medium rounded-xl text-md px-4 pt-1.5 pb-2 active:scale-90 duration-300 transform text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                >
+                                    Dashboard
+                                </Link>
+                            ) : (
+                                <>
+                                    <Link
+                                        href={route("login")}
+                                        className="text-white bg-slate-800 border font-medium rounded-xl text-md px-4 pt-1.5 pb-2 active:scale-90 duration-300 transform text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    >
+                                        Log in
+                                    </Link>
+                                    {/* <Link
+                                        href={route("register")}
+                                        className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                    >
+                                        Register
+                                    </Link> */}
+                                </>
+                            )}
+                            {/* <Link
                                 href={route("login")}
                                 className="text-white bg-slate-800 border font-medium rounded-xl text-md px-4 pt-1.5 pb-2 active:scale-90 duration-300 transform text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             >
                                 Login
-                            </Link>
+                            </Link> */}
                         </li>
                     </ul>
                 </div>

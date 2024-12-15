@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\ComplaintController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\Guest\HomeController;
 
 // Route::get('/', function () {
-//     return Inertia::render('Guest/Home/Home', [
+//     return Inertia::render('Welcome', [
 //         'canLogin' => Route::has('login'),
 //         'canRegister' => Route::has('register'),
 //         'laravelVersion' => Application::VERSION,

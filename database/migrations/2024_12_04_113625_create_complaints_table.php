@@ -13,13 +13,11 @@ return new class extends Migration
     {
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('alamat');
-            $table->string('aduan');
+            $table->string('name');
+            $table->string('message');
             $table->double('latitude');
             $table->double('longitude');
-            $table->string('bukti');
-            $table->string('rekaman');
+            $table->string('audio')->nullable();
             $table->timestamps();
         });
     }

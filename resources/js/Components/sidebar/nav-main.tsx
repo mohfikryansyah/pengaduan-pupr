@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, LayoutGrid, type LucideIcon } from "lucide-react";
+import { CheckCircle, ChevronRight, Cross, LayoutGrid, type LucideIcon } from "lucide-react";
 
 import {
     Collapsible,
@@ -99,8 +99,20 @@ export function NavMain({
                                 ? { isActive: true }
                                 : {})}
                         >
-                            <LayoutGrid />
+                            <Cross />
                             <span className="truncate">Data MAKAM Kota Gorontalo</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </Link>
+                <Link href="/complaint">
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            {...(url === "/complaint"
+                                ? { isActive: true }
+                                : {})}
+                        >
+                            <CheckCircle />
+                            <span className="truncate">Data Pengaduan</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </Link>

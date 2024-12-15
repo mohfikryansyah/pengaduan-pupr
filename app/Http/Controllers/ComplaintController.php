@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Complaint;
 use Illuminate\Http\Request;
+use App\Models\ComplaintFile;
+use Inertia\Inertia;
 
 class ComplaintController extends Controller
 {
@@ -12,7 +14,9 @@ class ComplaintController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Admin/Pengaduan/Index', [
+            'complaints' => Complaint::with('files')->get(),
+        ]);
     }
 
     /**
@@ -28,7 +32,36 @@ class ComplaintController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'message' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'audio' => 'nullable|file|mimes:audio/*',
+            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+        ]);
+    
+        // Simpan data pengmessage
+        $complaint = Complaint::create($request->only(['name', 'message', 'latitude', 'longitude']));
+    
+        // Simpan audio jika ada
+        if ($request->hasFile('audio')) {
+            $audioPath = $request->file('audio')->store('complaints/audio');
+            $complaint->update(['audio' => $audioPath]);
+        }
+    
+        // Simpan file bukti
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $filePath = $file->store('complaints/files');
+                ComplaintFile::create([
+                    'complaint_id' => $complaint->id,
+                    'file_path' => $filePath,
+                ]);
+            }
+        }
+    
+        return redirect()->back()->with('sucess', 'Berhasil mengirimkan penguduan!');
     }
 
     /**

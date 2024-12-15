@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ComplaintFile;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Complaint extends Model
 {
@@ -12,4 +14,9 @@ class Complaint extends Model
 
     protected $guarded = ['id'];
     
+
+    public function files(): HasMany
+    {
+        return $this->hasMany(ComplaintFile::class);
+    }
 }
