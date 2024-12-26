@@ -38,7 +38,7 @@ function Header() {
                 <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
                 <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-slate-900 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
                 <div className="h-[40rem] z-[20] min-w-screen-md flex justify-center items-center px-4">
-                    <div className="md:text-5xl text-4xl -mt-[5rem] mx-auto text-center space-y-2 font-semibold text-white dark:text-neutral-400">
+                    <div className="md:text-5xl text-4xl md:-mt-[5rem] mx-auto text-center space-y-2 font-semibold text-white dark:text-neutral-400">
                         {/* <SearchComplaint /> */}
                         <p className="md:text-xl text-lg text-neutral-300 font-normal relative">
                             Sampaikan laporan Anda langsung kepada instansi

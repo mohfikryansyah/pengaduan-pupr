@@ -31,6 +31,7 @@ import { Button } from "@/Components/ui/button";
 import { FileUpload } from "@/Components/ui/file-upload";
 import { formSchema } from "@/lib/FormPengaduan/schema";
 import { Coordinates } from "@/lib/FormPengaduan/type";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export default function FormPengaduan() {
     const form = useForm<z.infer<typeof formSchema>>({
@@ -62,29 +63,31 @@ export default function FormPengaduan() {
         });
     }
 
-    const [isMediumScreen, setIsMediumScreen] = useState(false);
+    const isDesktop = useMediaQuery("(min-width: 768px)");
 
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMediumScreen(window.innerWidth >= 768);
-        };
+    // const [isMediumScreen, setIsMediumScreen] = useState(false);
 
-        handleResize();
+    // useEffect(() => {
+    //     const handleResize = () => {
+    //         setIsMediumScreen(window.innerWidth >= 768);
+    //     };
 
-        window.addEventListener("resize", handleResize);
+    //     handleResize();
 
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    //     window.addEventListener("resize", handleResize);
+
+    //     return () => window.removeEventListener("resize", handleResize);
+    // }, []);
 
     const cardVariants: Variants = {
         offscreen: {
-            y: isMediumScreen ? 300 : 100,
+            y: isDesktop ? 300 : 100,
         },
         onscreen: {
             y: 50,
             // rotate: -10,
             transition: {
-                type: "tween",
+                type: "spring",
                 bounce: 0.4,
                 duration: 1,
             },
@@ -225,7 +228,7 @@ export default function FormPengaduan() {
                                     <FormItem>
                                         <FormLabel>Dokumen Pendukung</FormLabel>
                                         <FormControl>
-                                            <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
+                                            <div className="w-full mx-auto min-h-80 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
                                                 <FileUpload
                                                     onChange={handleFileUpload}
                                                 />
@@ -236,9 +239,9 @@ export default function FormPengaduan() {
                                 )}
                             />
                             <div>
-                                <label className="block font-medium">
+                                <FormLabel>
                                     Pilih Lokasi di Peta
-                                </label>
+                                </FormLabel>
                                 <MyMapComponent
                                     onCoordinatesChange={
                                         handleCoordinatesChange
