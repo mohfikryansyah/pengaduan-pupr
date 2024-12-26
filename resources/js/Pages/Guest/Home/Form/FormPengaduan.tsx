@@ -84,7 +84,7 @@ export default function FormPengaduan() {
             y: isDesktop ? 300 : 100,
         },
         onscreen: {
-            y: 50,
+            y: isDesktop ? 50 : 20,
             // rotate: -10,
             transition: {
                 type: "spring",
@@ -104,7 +104,11 @@ export default function FormPengaduan() {
             className="relative min-h-[90vh] p-4 md:p-0 z-[50]"
             initial="offscreen"
             whileInView="onscreen"
-            viewport={{ once: true, amount: 0.6 }}
+            viewport={{
+                once: true,
+                amount: isDesktop ? 0.6 : 0.3,
+            }}
+            
         >
             <motion.div
                 className="mx-auto md:-mt-[12rem] -mt-[7rem] lg:max-w-screen-lg w-full z-[1] bg-white shadow-xl p-6 rounded-2xl"
@@ -229,9 +233,9 @@ export default function FormPengaduan() {
                                         <FormLabel>Dokumen Pendukung</FormLabel>
                                         <FormControl>
                                             <div className="w-full mx-auto min-h-80 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
-                                                <FileUpload
+                                                {/* <FileUpload
                                                     onChange={handleFileUpload}
-                                                />
+                                                /> */}
                                             </div>
                                         </FormControl>
                                         <FormMessage />

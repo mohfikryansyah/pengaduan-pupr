@@ -9,8 +9,7 @@ import { Head } from "@inertiajs/react";
 import { useState } from "react";
 import { SearchComplaint } from "./SearchComplaint/search";
 
-export default function Home({errors}: {errors: string}) {
-    console.log(errors);
+export default function Home() {
     return (
         <Main>
             <Header />
