@@ -46,41 +46,17 @@ export default function FormPengaduan() {
         mode: "onBlur",
     });
 
-    const [files, setFiles] = useState<File[]>([]);
-    const handleFileUpload = (files: File[]) => {
-        setFiles(files);
-        console.log(files);
+    const handleFileUpload = (uploadedFiles: File[]) => {
+        form.setValue("files", uploadedFiles);
     };
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        const formData = new FormData();
-
-        // Masukkan nilai form ke FormData
-        formData.append("name", values.name);
-        formData.append("message", values.message);
-        if (values.audio) {
-            formData.append("audio", values.audio);
-        }
-        if (values.latitude !== undefined) {
-            formData.append("latitude", values.latitude.toString());
-        }
-        if (values.longitude !== undefined) {
-            formData.append("longitude", values.longitude.toString());
-        }
-
-        if (values.files) {
-            files.forEach((file, index) => {
-                formData.append(`files[${index}]`, file);
-            });
-        }
-
-        router.post(route("complaint.store"), formData, {
+    function onSubmit() {
+        router.post(route("complaint.store"), form.getValues(), {
             onSuccess: () => {
                 toast.success("Pengaduan berhasil dikirim!");
                 form.reset();
             },
             onError: (errors) => {
-                console.log(errors);
                 toast.error("Terjadi Kesalahan");
             },
         });
@@ -233,10 +209,7 @@ export default function FormPengaduan() {
                                                             type: "audio/wav",
                                                         }
                                                     );
-                                                    form.setValue(
-                                                        "audio",
-                                                        file
-                                                    );
+                                                    form.setValue("audio", file);
                                                     field.onChange(file);
                                                 }}
                                             />
@@ -254,13 +227,6 @@ export default function FormPengaduan() {
                                         <FormControl>
                                             <div className="w-full max-w-4xl mx-auto min-h-96 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
                                                 <FileUpload
-                                                    // onChange={(
-                                                    //     uploadedFiles
-                                                    // ) => {
-                                                    //     field.onChange(
-                                                    //         uploadedFiles
-                                                    //     );
-                                                    // }}
                                                     onChange={handleFileUpload}
                                                 />
                                             </div>
@@ -294,17 +260,6 @@ export default function FormPengaduan() {
                                                     <Input
                                                         placeholder="Masukkan Latitude"
                                                         {...field}
-                                                        // onChange={(e) => {
-                                                        //     const value =
-                                                        //         e.target.value;
-                                                        //     field.onChange(
-                                                        //         value === ""
-                                                        //             ? undefined
-                                                        //             : parseFloat(
-                                                        //                   value
-                                                        //               ) || value
-                                                        //     );
-                                                        // }}
                                                         className="focus:border-none focus-visible:ring-[#063b3e]"
                                                     />
                                                 </FormControl>
@@ -327,6 +282,7 @@ export default function FormPengaduan() {
                                                     <Input
                                                         placeholder="Masukkan Longitude"
                                                         {...field}
+                                                        type="text"
                                                         className="focus:border-none focus-visible:ring-[#063b3e]"
                                                     />
                                                 </FormControl>

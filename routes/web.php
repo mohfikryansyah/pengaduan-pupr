@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\Guest\HomeController;
+use App\Http\Controllers\ItemController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -20,6 +21,7 @@ Route::get('/', [HomeController::class, 'index'])->name('homepage');
 Route::post('/', [HomeController::class, 'store'])->name('homepage.store');
 
 Route::resource('/complaint', ComplaintController::class);
+Route::resource('/item', ItemController::class);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

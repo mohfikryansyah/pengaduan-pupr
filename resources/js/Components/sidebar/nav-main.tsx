@@ -116,6 +116,18 @@ export function NavMain({
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </Link>
+                <Link href="/item">
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            {...(url === "/item"
+                                ? { isActive: true }
+                                : {})}
+                        >
+                            <CheckCircle />
+                            <span className="truncate">Data Barang</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </Link>
             </SidebarMenu>
         </SidebarGroup>
     );

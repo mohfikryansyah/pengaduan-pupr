@@ -181,9 +181,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <Sidebar
             variant="inset"
             {...props}
-            className="bg-emerald-800 text-white"
+            className="bg-slate-900 text-white"
         >
-            <SidebarHeader className="bg-emerald-800 text-white">
+            <SidebarHeader className="bg-slate-900 text-white">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
@@ -208,12 +208,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
-            <SidebarContent className="bg-emerald-800 text-white">
+            <SidebarContent className="bg-slate-900 text-white">
                 <NavMain items={data.navMain} />
                 <NavProjects projects={data.projects} />
                 <NavSecondary items={data.navSecondary} className="mt-auto" />
             </SidebarContent>
-            <SidebarFooter className="bg-emerald-800 text-white">
+            <SidebarFooter className="bg-slate-900 text-white">
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

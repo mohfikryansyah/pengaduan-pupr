@@ -28,6 +28,7 @@ interface DataTableFacetedFilterProps<TData, TValue> {
         label: string;
         value: string;
         icon?: React.ComponentType<{ className?: string }>;
+        color: string;
     }[];
     resetFilter: boolean;
     onResetComplete: () => void;
@@ -44,7 +45,7 @@ export function DataTableFacetedFilter<TData, TValue>({
         const currentFilter = column?.getFilterValue();
         return Array.isArray(currentFilter) ? currentFilter : [];
     });
-
+    
     const facets = column?.getFacetedUniqueValues();
 
     React.useEffect(() => {
@@ -121,9 +122,9 @@ export function DataTableFacetedFilter<TData, TValue>({
                     )}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0" align="start">
+            <PopoverContent className="w-[250px] p-0" align="start">
                 <Command>
-                    <CommandInput placeholder={`Filter ${title}`} />
+                    <CommandInput placeholder={`Filter ${title}`} className="focus-visible:ring-0 focus-visible:border-0 focus-visible:ring-offset-0 w-full"/>
                     <CommandList>
                         <CommandEmpty>No results found.</CommandEmpty>
                         <CommandGroup>
@@ -150,7 +151,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                                             <Check />
                                         </div>
                                         {option.icon && (
-                                            <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                                            <option.icon className={cn('mr-2 h-4 w-4', option.color)} />
                                         )}
                                         <span>{option.label}</span>
                                         {facets?.get(option.value) && (

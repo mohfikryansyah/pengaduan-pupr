@@ -10,11 +10,7 @@ import {
 import "leaflet/dist/leaflet.css";
 
 import { Icon } from "leaflet";
-
-type Coordinates = {
-    lat: number;
-    lng: number;
-};
+import { Coordinates } from "@/lib/FormPengaduan/type";
 
 type MyMapComponentProps = {
     onCoordinatesChange: (coords: Coordinates) => void;
@@ -36,7 +32,10 @@ export default function MyMapComponent ({ onCoordinatesChange }: MyMapComponentP
     } | null>(null);
 
     const handleCoordinatesChange = (coords: Coordinates) => {
-        setMarkerPosition(coords);
+        setMarkerPosition({
+            lat: Number(coords.lat),
+            lng: Number(coords.lng),
+        });
         onCoordinatesChange(coords);
     };
 

@@ -5,6 +5,13 @@ export interface User {
     email_verified_at?: string;
 }
 
+export interface ComplaintStatus {
+    id: number;
+    complaint_id: number;
+    new_status: string;
+    note: string;
+}
+
 
 export interface ComplaintFile {
     id: number;
@@ -19,6 +26,8 @@ export interface Complaint {
     longitude: number;
     audio: string;
     files: ComplaintFile[];
+    statuses: ComplaintStatus;
+    created_at: string;
 }
 
 export type PageProps<

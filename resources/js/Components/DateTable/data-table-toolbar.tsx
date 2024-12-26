@@ -14,28 +14,31 @@ import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 // import { Category } from "../../Pages/Admin/Pengaduan/columns";
 import test from "node:test";
 import { useState } from "react";
+import { Complaint } from "@/types";
+import { Status } from "@/Pages/Admin/Pengaduan/columns";
 
 interface TableToolbarProps<TData> {
     table: Table<TData>;
     globalFilter: string;
     setGlobalFilter: (value: string) => void;
-    // filter?: Category[];
+    filter?: Status[];
 }
 
 export function TableToolbar<TData>({
     table,
     globalFilter,
     setGlobalFilter,
-    // filter,
+    filter,
 }: TableToolbarProps<TData>) {
     const isFilteredTitle = table.getState().columnFilters.length > 0;
     const isFilteredGlobal = globalFilter && globalFilter.length > 0;
-    // const fil =
-    //     filter?.map((tes) => ({
-    //         value: tes.name,
-    //         label: tes.name,
-    //         icon: HelpCircle,
-    //     })) || [];
+    const status =
+        filter?.map((filter) => ({
+            value: filter.label,
+            label: filter.label,
+            icon: filter.icon,
+            color: filter.color,
+        })) || [];
 
     const [resetFilter, setResetFilter] = useState(false);
 
@@ -46,29 +49,29 @@ export function TableToolbar<TData>({
     };
 
     const handleResetComplete = () => {
-        setResetFilter(false); // Matikan reset setelah selesai
+        setResetFilter(false);
     };
     return (
         <div className="flex items-center py-4">
             <div className="flex items-center space-x-2 w-full">
                 <Input
-                    placeholder="Filter titles..."
+                    placeholder="Cari nama..."
                     value={globalFilter}
                     onChange={(e) =>
                         table.setGlobalFilter(String(e.target.value))
                     }
-                    className="max-w-sm"
+                    className="max-w-sm focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
 
-                {/* {table.getColumn("category") && (
+                {table.getColumn("status") && (
                     <DataTableFacetedFilter
-                        column={table.getColumn("category")}
-                        title="Category"
-                        options={fil}
+                        column={table.getColumn("status")}
+                        title="Status"
+                        options={status}
                         resetFilter={resetFilter}
                         onResetComplete={handleResetComplete}
                     />
-                )} */}
+                )}
 
                 {(isFilteredTitle || isFilteredGlobal) && (
                     <Button
