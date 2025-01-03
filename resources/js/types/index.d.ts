@@ -5,13 +5,19 @@ export interface User {
     email_verified_at?: string;
 }
 
+export interface Item {
+    id: number;
+    name: string;
+    description: string;
+    stock: number;
+}
+
 export interface ComplaintStatus {
     id: number;
     complaint_id: number;
     new_status: string;
     note: string;
 }
-
 
 export interface ComplaintFile {
     id: number;

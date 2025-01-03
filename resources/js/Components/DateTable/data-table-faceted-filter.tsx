@@ -45,7 +45,7 @@ export function DataTableFacetedFilter<TData, TValue>({
         const currentFilter = column?.getFilterValue();
         return Array.isArray(currentFilter) ? currentFilter : [];
     });
-    
+
     const facets = column?.getFacetedUniqueValues();
 
     React.useEffect(() => {

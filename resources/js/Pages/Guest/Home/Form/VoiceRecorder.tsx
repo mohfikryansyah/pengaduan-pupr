@@ -73,7 +73,7 @@ const CustomAudioPlayer = ({ audioURL }: { audioURL: string }) => {
                 <audio
                     controls
                     className="audio-player"
-                    onPlay={() => console.log("Audio started playing")}
+                    // onPlay={() => console.log("Audio started playing")}
                 >
                     <source src={audioURL} type="audio/mp3" />
                     <source src={audioURL} type="audio/webm" />

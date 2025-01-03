@@ -2,7 +2,7 @@
 
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
-import { HelpCircle, icons, X } from "lucide-react";
+import { X } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -11,10 +11,7 @@ import {
 } from "@/Components/ui/dropdown-menu";
 import { Table } from "@tanstack/react-table";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
-// import { Category } from "../../Pages/Admin/Pengaduan/columns";
-import test from "node:test";
 import { useState } from "react";
-import { Complaint } from "@/types";
 import { Status } from "@/Pages/Admin/Pengaduan/columns";
 
 interface TableToolbarProps<TData> {
@@ -39,7 +36,7 @@ export function TableToolbar<TData>({
             icon: filter.icon,
             color: filter.color,
         })) || [];
-
+        
     const [resetFilter, setResetFilter] = useState(false);
 
     const handleResetFilters = () => {
@@ -63,9 +60,9 @@ export function TableToolbar<TData>({
                     className="max-w-sm focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
 
-                {table.getColumn("status") && (
+                {table.getColumn("Status") && (
                     <DataTableFacetedFilter
-                        column={table.getColumn("status")}
+                        column={table.getColumn("Status")}
                         title="Status"
                         options={status}
                         resetFilter={resetFilter}

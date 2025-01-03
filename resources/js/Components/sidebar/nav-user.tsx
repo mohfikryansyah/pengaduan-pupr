@@ -26,11 +26,12 @@ import {
     useSidebar,
 } from "@/Components/ui/sidebar";
 import { Link, usePage } from "@inertiajs/react";
+import { PageProps } from "@/types";
 
 export function NavUser() {
     const { isMobile } = useSidebar();
-
     const user = usePage().props.auth.user;
+    
 
     return (
         <SidebarMenu>

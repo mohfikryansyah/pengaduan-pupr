@@ -32,16 +32,18 @@ import { FileUpload } from "@/Components/ui/file-upload";
 import { formSchema } from "@/lib/FormPengaduan/schema";
 import { Coordinates } from "@/lib/FormPengaduan/type";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import NumberInput from "@/Components/NumberInput";
 
 export default function FormPengaduan() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
+            number: "",
             message: "",
             audio: undefined,
-            latitude: undefined,
-            longitude: undefined,
+            latitude: "",
+            longitude: "",
             files: [],
         },
         mode: "onBlur",
@@ -56,6 +58,8 @@ export default function FormPengaduan() {
             onSuccess: () => {
                 toast.success("Pengaduan berhasil dikirim!");
                 form.reset();
+                form.setValue("audio", undefined);
+                form.setValue("number", "");
             },
             onError: (errors) => {
                 toast.error("Terjadi Kesalahan");
@@ -65,29 +69,15 @@ export default function FormPengaduan() {
 
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
-    // const [isMediumScreen, setIsMediumScreen] = useState(false);
-
-    // useEffect(() => {
-    //     const handleResize = () => {
-    //         setIsMediumScreen(window.innerWidth >= 768);
-    //     };
-
-    //     handleResize();
-
-    //     window.addEventListener("resize", handleResize);
-
-    //     return () => window.removeEventListener("resize", handleResize);
-    // }, []);
-
     const cardVariants: Variants = {
         offscreen: {
-            y: isDesktop ? 300 : 100,
+            y: isDesktop ? 10 : 50,
         },
         onscreen: {
-            y: isDesktop ? 50 : 20,
+            y: isDesktop ? -90 : -40,
             // rotate: -10,
             transition: {
-                type: "spring",
+                type: "bounce",
                 bounce: 0.4,
                 duration: 1,
             },
@@ -101,21 +91,20 @@ export default function FormPengaduan() {
 
     return (
         <motion.div
-            className="relative min-h-[90vh] p-4 md:p-0 z-[50]"
+            className="relative min-h-[90vh] bg-white -mt-16 md:rounded-t-[4rem] rounded-3xl p-4 md:p-0 z-[50]"
             initial="offscreen"
             whileInView="onscreen"
             viewport={{
                 once: true,
                 amount: isDesktop ? 0.6 : 0.3,
             }}
-            
         >
             <motion.div
-                className="mx-auto md:-mt-[12rem] -mt-[7rem] lg:max-w-screen-lg w-full z-[1] bg-white shadow-xl p-6 rounded-2xl"
+                className="mx-auto lg:max-w-screen-lg w-full z-[1] bg-white shadow-xl p-6 rounded-2xl"
                 variants={cardVariants}
             >
-                <div className="w-full p-4 rounded-lg bg-slate-900 flex items-center justify-between">
-                    <h1 className="text-yellow-400 font-semibold md:text-2xl text-lg">
+                <div className="w-full p-4 rounded-lg bg-[#348d9d] flex items-center justify-between">
+                    <h1 className="text-white font-semibold md:text-2xl text-lg">
                         Sampaikan Laporan Anda
                     </h1>
 
@@ -137,7 +126,7 @@ export default function FormPengaduan() {
                         </DialogContent>
                     </Dialog>
                 </div>
-                <div className="mt-2">
+                <div className="space-y-2 mt-2">
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
@@ -159,7 +148,30 @@ export default function FormPengaduan() {
                                             <Input
                                                 placeholder="Ketikkan Nama Anda"
                                                 {...field}
-                                                className="focus:border-none focus-visible:ring-[#063b3e]"
+                                                className="focus-visible:ring-[#063b3e]"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="number"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            Nomor HP
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
+                                        </FormLabel>
+                                        <FormControl>
+                                            <NumberInput
+                                                type="tel"
+                                                placeholder="Masukkan nomor HP Anda"
+                                                {...field}
+                                                className="focus-visible:ring-[#063b3e] block h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background md:text-sm"
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -216,7 +228,10 @@ export default function FormPengaduan() {
                                                             type: "audio/wav",
                                                         }
                                                     );
-                                                    form.setValue("audio", file);
+                                                    form.setValue(
+                                                        "audio",
+                                                        file
+                                                    );
                                                     field.onChange(file);
                                                 }}
                                             />
@@ -233,73 +248,68 @@ export default function FormPengaduan() {
                                         <FormLabel>Dokumen Pendukung</FormLabel>
                                         <FormControl>
                                             <div className="w-full mx-auto min-h-80 border border-dashed bg-white dark:bg-black border-neutral-200 dark:border-neutral-800 rounded-lg">
-                                                {/* <FileUpload
+                                                <FileUpload
                                                     onChange={handleFileUpload}
-                                                /> */}
+                                                />
                                             </div>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
-                            <div>
-                                <FormLabel>
-                                    Pilih Lokasi di Peta
-                                </FormLabel>
+                            <div className="space-y-2">
+                                <FormLabel>Pilih Lokasi di Peta</FormLabel>
                                 <MyMapComponent
                                     onCoordinatesChange={
                                         handleCoordinatesChange
                                     }
                                 />
-                                <div className="mt-2">
-                                    <FormField
-                                        control={form.control}
-                                        name="latitude"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>
-                                                    Latitude
-                                                    <span className="text-red-500">
-                                                        *
-                                                    </span>
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        placeholder="Masukkan Latitude"
-                                                        {...field}
-                                                        className="focus:border-none focus-visible:ring-[#063b3e]"
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="longitude"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>
-                                                    Longitude
-                                                    <span className="text-red-500">
-                                                        *
-                                                    </span>
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        placeholder="Masukkan Longitude"
-                                                        {...field}
-                                                        type="text"
-                                                        className="focus:border-none focus-visible:ring-[#063b3e]"
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
                             </div>
-
+                            <FormField
+                                control={form.control}
+                                name="latitude"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            Latitude
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Masukkan Latitude"
+                                                {...field}
+                                                className="focus-visible:ring-[#063b3e]"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="longitude"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            Longitude
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Masukkan Longitude"
+                                                {...field}
+                                                type="text"
+                                                className="focus-visible:ring-[#063b3e]"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <Button type="submit">Submit</Button>
                         </form>
                     </Form>

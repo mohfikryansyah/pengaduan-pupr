@@ -3,6 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Complaint } from "@/types";
 import { columns, Status } from "./columns";
 import { HelpCircle, Circle, CheckCircle2, XCircle } from "lucide-react";
+import { Head } from "@inertiajs/react";
 
 const status = [
     {
@@ -31,10 +32,11 @@ const status = [
     },
 ];
 
-export default function Index({complaints}: {complaints: Complaint[]}) {
+export default function Index({ complaints }: { complaints: Complaint[] }) {
     return (
         <AuthenticatedLayout>
-            <DataTable columns={columns} data={complaints} filter={status}/>
+            <Head title="Data Pengaduan"/>
+            <DataTable columns={columns} data={complaints} filter={status} />
         </AuthenticatedLayout>
     );
-};
+}

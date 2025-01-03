@@ -92,15 +92,17 @@ export const columns: ColumnDef<Complaint>[] = [
     {
         accessorKey: "files",
         id: "Files",
-        header: 'Files',
+        header: "Files",
         cell: ({ row }) => {
             const files = row.original.files;
-            // console.log(files)
             return (
                 <span className="ml-2">
                     {files.map((file) => (
                         <div key={file.id}>
-                            <a href={"storage/" + file.file_path} download={"storage/" + file.file_path}>
+                            <a
+                                href={"storage/" + file.file_path}
+                                download={"storage/" + file.file_path}
+                            >
                                 Download File
                             </a>
                         </div>
@@ -110,8 +112,8 @@ export const columns: ColumnDef<Complaint>[] = [
         },
     },
     {
-        accessorKey: "status",
-        id: "status",
+        accessorKey: "statuses.new_status",
+        id: "Status",
         filterFn: "arrIncludesSome",
         header: ({ column }) => {
             return (
@@ -134,7 +136,8 @@ export const columns: ColumnDef<Complaint>[] = [
             const [selectedStatus, setSelectedStatus] =
                 React.useState<Status | null>(
                     statuses.find(
-                        (status) => status.label === complaint.statuses.new_status
+                        (status) =>
+                            status.label === complaint.statuses.new_status
                     ) || null
                 );
 
@@ -262,12 +265,12 @@ export const columns: ColumnDef<Complaint>[] = [
                 </Button>
             );
         },
-        cell: ({ row }) => {
-            const createdAt = row.original.created_at;
-            const formatted = dayjs(createdAt).fromNow();
+        // cell: ({ row }) => {
+        //     // const createdAt = row.original.created_at;
+        //     // const formatted = dayjs(createdAt).fromNow();
 
-            return <span className="font-medium">{formatted}</span>;
-        },
+        //     // return <span className="font-medium">{created_}</span>;
+        // },
     },
 ];
 
@@ -282,7 +285,10 @@ function StatusList({
 }) {
     return (
         <Command>
-            <CommandInput placeholder="Filter status..." className="focus-visible:ring-0 focus-visible:border-0 focus-visible:ring-offset-0"/>
+            <CommandInput
+                placeholder="Filter status..."
+                className="focus-visible:ring-0 focus-visible:border-0 focus-visible:ring-offset-0"
+            />
             <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup>
@@ -295,6 +301,7 @@ function StatusList({
                                     statuses.find(
                                         (priority) => priority.value === value
                                     ) || null;
+                                console.log(newStatus);
                                 handlePublishToggle(newStatus);
                                 setOpen(false);
                             }}

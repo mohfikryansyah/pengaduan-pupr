@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Complaint;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ComplaintFile;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 
 class ComplaintController extends Controller
@@ -15,16 +16,8 @@ class ComplaintController extends Controller
      */
     public function index()
     {
-        $statuses = [
-            ['value' => 'belum diproses', 'label' => 'Belum diproses', 'color' => 'text-orange-500', 'icon' => ''],
-            ['value' => 'sedang diproses', 'label' => 'Sedang diproses', 'color' => 'text-blue-500'],
-            ['value' => 'selesai diproses', 'label' => 'Selesai', 'color' => 'text-green-500'],
-            ['value' => 'pengaduan ditolak', 'label' => 'Pengaduan ditolak', 'color' => 'text-red-500'],
-        ];
-
         return Inertia::render('Admin/Pengaduan/Index', [
-            'complaints' => Complaint::with(['files', 'statuses'])->latest()->get(),
-            'status' => $statuses,
+            'complaints' => Complaint::latest()->get(),
         ]);
     }
 
@@ -41,19 +34,15 @@ class ComplaintController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'message' => 'required|string',
+            'number' => 'required|string',
             'latitude' => 'required',
             'longitude' => 'required',
             'audio' => 'nullable|file',
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
-
-        $validatedData['longitude'] = (float) $request['longitude'];
-        $validatedData['latitude'] = (float) $request['latitude'];
 
         DB::beginTransaction();
 
@@ -61,8 +50,10 @@ class ComplaintController extends Controller
             $complaint = Complaint::create([
                 'name' => $validatedData['name'],
                 'message' => $validatedData['message'],
-                'latitude' => $validatedData['latitude'],
-                'longitude' => $validatedData['longitude'],
+                'number' => $validatedData['number'],
+                'latitude' => $validatedData['latitude'] = (double) $request['longitude'],
+                'longitude' => $validatedData['longitude'] = (double) $request['latitude'],
+                'code' => $validatedData['code'] = 'LAPOR-' . Str::random(6),
             ]);
 
             $complaint->statuses()->create([
@@ -85,7 +76,6 @@ class ComplaintController extends Controller
             }
 
             DB::commit();
-
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->back()->with('error', $th->getMessage());
@@ -117,68 +107,11 @@ class ComplaintController extends Controller
      */
     public function update(Request $request, Complaint $complaint)
     {
-        $validatedData = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'message' => 'sometimes|string',
-            'latitude' => 'sometimes|numeric',
-            'longitude' => 'sometimes|numeric',
-            'audio' => 'nullable|file|mimes:audio/*',
-            'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'new_status' => 'sometimes'
+        $request->validate([
+            'new_status' => 'required',
         ]);
-        
+
         $complaint->statuses()->create($request->only('new_status'));
-
-        // DB::beginTransaction();
-
-        // try {
-        //     $complaint->statuses()->create($request->only('new_status'));
-
-        //     if ($request->hasFile('audio')) {
-        //         $audioPath = $request->file('audio')->store('complaints/audio');
-        //         $complaint->update(['audio' => $audioPath]);
-        //     }
-
-        //     if ($request->hasFile('files')) {
-        //         foreach ($request->file('files') as $file) {
-        //             $filePath = $file->store('complaints/files');
-        //             ComplaintFile::create([
-        //                 'complaint_id' => $complaint->id,
-        //                 'file_path' => $filePath,
-        //             ]);
-        //         }
-        //     }
-
-        //     if ($request->has('status')) {
-        //         $complaint->statuses()->create([
-        //             'complaint_id' => $complaint->id,
-        //             'status' => $validatedData['status'],
-        //         ]);
-        //     }
-
-        //     DB::commit();
-
-        // } catch (\Throwable $th) {
-        //     DB::rollBack();
-        //     return redirect()->back()->with('error', $th->getMessage());
-        // }
-
-        // $complaint->update($validatedData);
-
-        // if ($request->hasFile('audio')) {
-        //     $audioPath = $request->file('audio')->store('complaints/audio');
-        //     $complaint->update(['audio' => $audioPath]);
-        // }
-
-        // if ($request->hasFile('files')) {
-        //     foreach ($request->file('files') as $file) {
-        //         $filePath = $file->store('complaints/files');
-        //         ComplaintFile::create([
-        //             'complaint_id' => $complaint->id,
-        //             'file_path' => $filePath,
-        //         ]);
-        //     }
-        // }
 
         return redirect()->back()->with('sucess', 'Berhasil mengirimkan penguduan!');
     }
@@ -189,5 +122,18 @@ class ComplaintController extends Controller
     public function destroy(Complaint $complaint)
     {
         //
+    }
+
+    public function search(Request $request)
+    {   
+        $query = $request->get('query');
+
+        $complaints = Complaint::where('number', 'like', $query)->get();
+
+        dd($complaints);
+
+        return Inertia::render('Admin/Pengaduan/Index', [
+            'complaints' => $complaints,
+        ]);
     }
 }

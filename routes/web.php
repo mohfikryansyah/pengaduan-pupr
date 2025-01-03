@@ -1,12 +1,14 @@
 <?php
 
+use App\Models\Item;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\Guest\HomeController;
-use App\Http\Controllers\ItemController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -19,6 +21,16 @@ use App\Http\Controllers\ItemController;
 
 Route::get('/', [HomeController::class, 'index'])->name('homepage');
 Route::post('/', [HomeController::class, 'store'])->name('homepage.store');
+
+Route::get('/search', [ComplaintController::class, 'search'])->name('complaint.search');
+Route::get('/delete', function () {
+    $tes = Item::find(2);
+    $tes->delete();
+})->name('delete');
+
+Route::get('/deletee', function (Request $request) {
+    return response()->json(Item::all());
+})->name('delete');
 
 Route::resource('/complaint', ComplaintController::class);
 Route::resource('/item', ItemController::class);
