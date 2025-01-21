@@ -129,7 +129,7 @@ export default function FormPengaduan() {
                         </DialogContent>
                     </Dialog>
                 </div>
-                <div className="space-y-2 mt-2">
+                <div className="space-y-2 mt-5">
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}

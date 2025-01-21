@@ -16,7 +16,7 @@ import { TableToolbar } from "./data-table-toolbar";
 import { TableContent } from "./data-table-body";
 import { TablePagination } from "./data-table-pagination";
 import { Complaint } from "@/types";
-import { Status } from "@/Pages/Admin/Pengaduan/columns";
+import { Status } from "@/types";
 // import { Category } from "../../Pages/Admin/Pengaduan/columns";
 
 interface DataTableProps<TData, TValue> {

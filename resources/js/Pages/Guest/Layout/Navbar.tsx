@@ -37,6 +37,7 @@ export default function Navbar() {
     const { auth } = usePage<PageProps>().props;
     const [scrollY, setScrollY] = useState<number>(0);
     const navbarRef = useRef<HTMLElement | null>(null);
+    const navbarItemRef = useRef<HTMLDivElement | null>(null);
     const logoRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -44,24 +45,17 @@ export default function Navbar() {
             const scrollY = window.scrollY;
             setScrollY(scrollY);
             const navbar = navbarRef.current;
-            const logo = logoRef.current;
-            // if (navbar) {
-            //     if (scrollY > 0) {
-            //         navbar.classList.add("bg-white/80", "shadow-md", "backdrop-filter");
-            //         navbar.classList.remove("bg-transparent");
-            //         logo!.classList.add("text-gray-800");
-            //         logo!.classList.remove("text-gray-50");
-            //     } else {
-            //         navbar.classList.add("bg-transparent");
-            //         navbar.classList.remove("bg-white/80", "shadow-md", "backdrop-filter");
-            //         logo!.classList.remove("text-gray-800");
-            //         logo!.classList.add("text-gray-50");
-            //     }
-            // }
+            const navbarItem = navbarItemRef.current;
             if (navbar) {
                 if (scrollY > 0) {
+                    navbarItem?.classList.add("max-w-7xl");
+                    navbarItem?.classList.remove("max-w-for-monitor");
                     navbar.classList.add("bg-[#083247]", "shadow-md");
+                    navbar.classList.remove("mt-3");
                 } else {
+                    navbarItem?.classList.remove("max-w-7xl");
+                    navbarItem?.classList.add("max-w-for-monitor");
+                    navbar.classList.add("mt-3");
                     navbar.classList.remove("bg-[#083247]", "shadow-md");
                 }
             }
@@ -77,10 +71,13 @@ export default function Navbar() {
         <nav
             ref={navbarRef}
             className={cn(
-                "fixed w-full z-[121] top-0 border-gray-200 dark:bg-gray-900 lg:px-12 px-6 duration-500"
+                "fixed w-full z-[121] top-0 lg:px-12 px-6 duration-300 transition-all mt-3"
             )}
         >
-            <div className="max-w-for-monitor flex flex-wrap items-center justify-between mx-auto py-3">
+            <div
+                ref={navbarItemRef}
+                className="max-w-for-monitor flex flex-wrap items-center justify-between mx-auto py-3 duration-300 transition-all"
+            >
                 <Link
                     href="https://flowbite.com/"
                     className="flex items-center space-x-3 rtl:space-x-reverse"
@@ -90,7 +87,7 @@ export default function Navbar() {
                         className="w-9 h-auto"
                         alt="Flowbite Logo"
                     />
-                    <div ref={logoRef} className="-space-y-2 text-gray-50">
+                    <div ref={logoRef} className="-space-y-1 text-gray-50">
                         <p className="self-center text-xl font-bold whitespace-nowrap">
                             DISPERKIM
                         </p>
@@ -135,8 +132,7 @@ export default function Navbar() {
                         )}
                     >
                         {navbar.map((nav, index) => (
-                            <li key={index}
-                            >
+                            <li key={index}>
                                 <a
                                     href={nav.url}
                                     className="block rounded md:bg-transparent md:p-0 hover:text-blue-400 transition duration-300"

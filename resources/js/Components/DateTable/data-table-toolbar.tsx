@@ -12,7 +12,7 @@ import {
 import { Table } from "@tanstack/react-table";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 import { useState } from "react";
-import { Status } from "@/Pages/Admin/Pengaduan/columns";
+import { Status } from "@/types";
 
 interface TableToolbarProps<TData> {
     table: Table<TData>;

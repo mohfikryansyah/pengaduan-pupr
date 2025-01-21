@@ -22,10 +22,18 @@ class Complaint extends Model
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => \Carbon\Carbon::parse($value)->diffForHumans()
+            get: fn($value) => \Carbon\Carbon::parse($value)->diffForHumans()
         );
     }
-    
+    protected $appends = [
+        'created_at_formatted',
+    ];
+
+    public function getCreatedAtFormattedAttribute()
+    {
+        return $this->attributes['created_at'];
+    }
+
 
     public function files(): HasMany
     {

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Enums\Status;
 use App\Models\Complaint;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ComplaintFile;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ComplaintController extends Controller
 {
@@ -109,7 +111,7 @@ class ComplaintController extends Controller
     public function update(Request $request, Complaint $complaint)
     {
         $request->validate([
-            'status' => 'required',
+            'status' => ['required', Rule::in(Status::values())],
         ]);
 
         $complaint->statuses()->create($request->only('status'));
@@ -129,7 +131,7 @@ class ComplaintController extends Controller
     {   
         $query = $request->get('query');
 
-        $complaints = Complaint::where('number', 'like', $query)->get();
+        $complaints = Complaint::where('telp', 'like', $query)->get();
 
         dd($complaints);
 

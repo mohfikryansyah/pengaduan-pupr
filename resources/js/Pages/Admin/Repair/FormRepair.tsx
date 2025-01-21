@@ -32,7 +32,7 @@ import {
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import Modal from "@/Components/Modal";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DangerButton from "@/Components/DangerButton";
 import { Complaint, Item } from "@/types";
 import { router, usePage } from "@inertiajs/react";
@@ -171,8 +171,6 @@ function RepairForm({
         statuses.includes(complaint.statuses.status)
     );
 
-    console.log(complaintsBelumAtauSedangDiproses)
-
     return (
         <Form {...form}>
             <form
@@ -292,7 +290,34 @@ function RepairForm({
     );
 }
 
-function List({ children }: { children: React.ReactNode }) {
+
+function List({
+    children,
+    loadMore,
+    hasMore,
+}: {
+    children: React.ReactNode;
+    loadMore: () => void;
+    hasMore: boolean;
+}) {
+    const observerRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (!observerRef.current || !hasMore) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    loadMore();
+                }
+            },
+            { threshold: 1.0 }
+        );
+
+        observer.observe(observerRef.current);
+        return () => observer.disconnect();
+    }, [loadMore, hasMore]);
+
     return (
         <Command>
             <CommandInput
@@ -302,6 +327,7 @@ function List({ children }: { children: React.ReactNode }) {
             <CommandList className="min-w-full">
                 <CommandEmpty>No framework found.</CommandEmpty>
                 <CommandGroup>{children}</CommandGroup>
+                {hasMore && <div ref={observerRef} className="h-10" />}
             </CommandList>
         </Command>
     );
@@ -325,6 +351,34 @@ const SelectField = ({
     description,
 }: CustomPopoverFieldProps) => {
     const [open, setOpen] = useState(false);
+    const [visibleData, setVisibleData] = useState(data.slice(0, 20));
+    const [hasMore, setHasMore] = useState(data.length > 20);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Detect mobile screen size
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768); // Mobile screen breakpoint
+        };
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    const loadMore = () => {
+        const currentLength = visibleData.length;
+        const nextData = data.slice(currentLength, currentLength + 20);
+        setVisibleData((prev) => [...prev, ...nextData]);
+        setHasMore(currentLength + nextData.length < data.length);
+    };
+
+    const handlePopoverChange = (isOpen: boolean) => {
+        setOpen(isOpen);
+        if (!isOpen) {
+            setVisibleData(data.slice(0, 20));
+            setHasMore(data.length > 20);
+        }
+    };
 
     return (
         <FormField
@@ -333,7 +387,11 @@ const SelectField = ({
             render={({ field }) => (
                 <FormItem className="flex flex-col">
                     <FormLabel>{label}</FormLabel>
-                    <Popover open={open} onOpenChange={setOpen}>
+                    <Popover
+                        open={open}
+                        onOpenChange={handlePopoverChange}
+                        modal={isMobile} // Modal behavior for mobile
+                    >
                         <PopoverTrigger asChild>
                             <FormControl>
                                 <Button
@@ -353,9 +411,16 @@ const SelectField = ({
                                 </Button>
                             </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-full p-0 popover-content-width-same-as-its-trigger z-[9999]">
-                            <List>
-                                {data.map((item) => (
+                        <PopoverContent
+                            className={cn(
+                                "w-full p-0 z-[9999] popover-content-width-same-as-its-trigger",
+                                isMobile
+                                    ?? "inset-0 bg-white overflow-auto"
+                                    
+                            )}
+                        >
+                            <List loadMore={loadMore} hasMore={hasMore}>
+                                {visibleData.map((item) => (
                                     <CommandItem
                                         value={item.name}
                                         key={item.id}
@@ -387,3 +452,4 @@ const SelectField = ({
         />
     );
 };
+

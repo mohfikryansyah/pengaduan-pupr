@@ -9,7 +9,6 @@ import { toast } from "react-hot-toast";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
-
 import { useMediaQuery } from "@/hooks/use-media-query";
 import {
     Command,
@@ -25,53 +24,14 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/Components/ui/popover";
-
 import { Button } from "@/Components/ui/button";
-import { Complaint } from "@/types";
-import {
-    CheckCircle2,
-    Circle,
-    HelpCircle,
-    LucideIcon,
-    XCircle,
-} from "lucide-react";
+import { Complaint, Status } from "@/types";
+import { statuses } from "@/Pages/Admin/Pengaduan/Index";
 import { cn } from "@/lib/utils";
 
-export type Status = {
-    value: string;
-    label: string;
-    icon: LucideIcon;
-    color: string;
-};
-
-const statuses: Status[] = [
-    {
-        value: "belum diproses",
-        label: "Belum diproses",
-        icon: HelpCircle,
-        color: "text-orange-500",
-    },
-    {
-        value: "sedang diproses",
-        label: "Sedang diproses",
-        icon: Circle,
-        color: "text-blue-500",
-    },
-    {
-        value: "selesai diproses",
-        label: "Selesai",
-        icon: CheckCircle2,
-        color: "text-green-500",
-    },
-    {
-        value: "pengaduan ditolak",
-        label: "Pengaduan ditolak",
-        icon: XCircle,
-        color: "text-red-500",
-    },
-];
-
-export const columns: ColumnDef<Complaint>[] = [
+export const columns = (
+    handleOpenDialog: (complaint: Complaint) => void
+): ColumnDef<Complaint>[] => [
     {
         accessorKey: "name",
         id: "Nama",
@@ -87,6 +47,39 @@ export const columns: ColumnDef<Complaint>[] = [
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             );
+        },
+        cell: ({ row }) => {
+            const complaint = row.original;
+            return (
+                <Button
+                    variant="link"
+                    className="text-left"
+                    onClick={() => handleOpenDialog(complaint)}
+                >
+                    {complaint.name}
+                </Button>
+            );
+        },
+    },
+    {
+        accessorKey: "message",
+        id: "Pesan",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
+                    Pesan
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => {
+            const message = row.original.message;
+            return <div className="truncate max-w-xs">{message}</div>;
         },
     },
     {
@@ -130,16 +123,14 @@ export const columns: ColumnDef<Complaint>[] = [
         },
         cell: ({ row }) => {
             const complaint = row.original;
-            const [open, setOpen] = React.useState(false);
+            const [open, setOpen] = useState(false);
             const isDesktop = useMediaQuery("(min-width: 768px)");
 
-            const [selectedStatus, setSelectedStatus] =
-                React.useState<Status | null>(
-                    statuses.find(
-                        (status) =>
-                            status.label === complaint.statuses.status
-                    ) || null
-                );
+            const [selectedStatus, setSelectedStatus] = useState<Status | null>(
+                statuses.find(
+                    (status) => status.label === complaint.statuses.status
+                ) || null
+            );
 
             const [isLoading, setIsLoading] = useState(false);
 
@@ -254,7 +245,6 @@ export const columns: ColumnDef<Complaint>[] = [
         header: ({ column }) => {
             return (
                 <Button
-                    className="px-0"
                     variant="ghost"
                     onClick={() =>
                         column.toggleSorting(column.getIsSorted() === "asc")

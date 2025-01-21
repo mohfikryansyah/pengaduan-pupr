@@ -34,6 +34,7 @@ export interface Complaint {
     files: ComplaintFile[];
     statuses: ComplaintStatus;
     created_at: string;
+    created_at_formatted: string;
 }
 
 export interface Repair {
@@ -46,6 +47,13 @@ export interface Repair {
     note: string;
     created_at: string;
 }
+
+export interface Status {
+    value: string;
+    label: string;
+    icon: LucideIcon;
+    color: string;
+};
 
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,

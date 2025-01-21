@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         Item::factory(10)->create();
         // Complaint::factory(18)->create();
-        ComplaintStatus::factory(18)->create();
+        ComplaintStatus::factory(1000)->create();
 
         User::factory()->create([
             'name' => 'Test User',
