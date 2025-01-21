@@ -1,17 +1,10 @@
-"use client";
-
 import Main from "../Layout/Main";
 import { FlipWords } from "@/Components/ui/flip-words";
-import { BackgroundBeamsWithCollision } from "@/Components/ui/background-beams-with-collision";
-import { HeroParallaxDemo } from "./HeroParallax";
 import FormPengaduan from "./Form/FormPengaduan";
 import { Head, Link, router } from "@inertiajs/react";
 import { useEffect, useState } from "react";
-import { SearchComplaint } from "./SearchComplaint/search";
 import { Input } from "@/Components/ui/input";
 import { Search, Twitter } from "lucide-react";
-import { BackgroundBeams } from "@/Components/ui/background-beams";
-import { Spotlight } from "@/Components/ui/spotlight";
 import { Button } from "@/Components/ui/button";
 import {
     Accordion,
@@ -22,6 +15,17 @@ import {
 import { TimelineDemo } from "./Timeline/timeline";
 import toast from "react-hot-toast";
 import { AnimatedTestimonials } from "@/Components/ui/animated-testimonials";
+import {
+    animate,
+    motion,
+    useAnimate,
+    useInView,
+    useMotionValue,
+    useTransform,
+    Variants,
+} from "framer-motion";
+import MyCard from "@/Components/ui/mycard";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export default function Home() {
     return (
@@ -29,10 +33,10 @@ export default function Home() {
             <Head title="Dinas Perumahan dan Pemukiman" />
             <Header />
             <FormPengaduan />
-            <Fitur />
+            <AlurPengaduan />
             <WhyUs />
             <AnimatedTestimonialsDemo />
-            <Pertanyaan />
+            {/* <Pertanyaan /> */}
             <Footer />
             {/* <TimelineDemo /> */}
             {/* <HeroParallaxDemo /> */}
@@ -52,219 +56,217 @@ function Header() {
     const [search, setSearch] = useState<string>("");
     const handleSearch = () => {
         if (search.length > 9) {
-            router.get(route("complaint.search"), { query: search });
+            router.get(
+                route("complaint.search"),
+                { query: search },
+                { preserveState: true, preserveScroll: true }
+            );
+        } else {
+            return toast.error("Nomor telp tidak valid");
         }
-
-        return toast.error("Nomor telp tidak valid");
     };
 
-    // useEffect(() => {
-    //     const timeoutId = setTimeout(() => {
-    //         if (search.trim()) {
-    //             router.get(
-    //                 route("complaint.search"),
-    //                 { query: search },
-    //                 {
-    //                     preserveState: true,
-    //                     preserveScroll: true,
-    //                 }
-    //             );
-    //         }
-    //     }, 500);
-
-    //     return () => clearTimeout(timeoutId);
-    // }, [search]);
-
     return (
-        // <BackgroundBeamsWithCollision>
-        //     <Head title="Dinas Perumahan dan Pemukiman" />
-        //     <div className="bg-grid-white/[0.2] relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
-        //         <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
-        //         <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-slate-900 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
-        //         <div className="h-[40rem] z-[20] min-w-screen-md flex justify-center items-center px-4">
-        //             <div className="md:text-5xl text-4xl md:-mt-[5rem] mx-auto text-center space-y-2 font-semibold text-white dark:text-neutral-400">
-        //                 <div className="inline-flex items-center bg-white/80 rounded-lg max-w-xl mb-3">
-        //                     <Search className="ml-2 w-5 h-5 text-black/70" />
-        //                     <Input
-        //                         placeholder="Ketik ID laporan Anda, ex. LAPOR1342"
-        //                         className="focus-visible:ring-0 focus-visible:border-0 w-[300px] mx-auto focus-visible:ring-offset-0 text-black/80 bg-transparent border-0"
-        //                         onChange={(e) => setSearch(e.target.value)}
-        //                         value={search}
-        //                     />
-        //                 </div>
-        //                 <p className="md:text-xl text-lg text-neutral-300 font-normal relative">
-        //                     Sampaikan laporan Anda langsung kepada instansi
-        //                     pemerintah berwenang
-        //                 </p>
-        //                 <h1>
-        //                     Layanan Pengaduan <br />
-        //                 </h1>
-        //                 <FlipWords
-        //                     words={words}
-        //                     className="text-yellow-500 px-0"
-        //                 />
-        //             </div>
-        //         </div>
-        //     </div>
-        // </BackgroundBeamsWithCollision>
-        <div className="bg-[#e9f3f4] w-full h-[70vh] flex item-center justify-around">
-            <div className="md:text-6xl text-4xl flex flex-col gap-y-2 md:-mt-20 md:px-0 px-3 items-start justify-center text-center font-semibold text-[#1d1e20] dark:text-neutral-400">
-                <h1>
-                    Layanan Pengaduan <br />
-                </h1>
-                <FlipWords
-                    words={words}
-                    className="text-[#083247] px-0 font-extrabold"
-                />
-                <p className="md:text-xl my-5 md:max-w-md text-start text-lg text-[#818a9e]">
-                    Sampaikan laporan Anda langsung kepada instansi pemerintah
-                    berwenang
-                </p>
-                <div className="flex">
-                    <div className="inline-flex items-center bg-white/80 rounded-lg max-w-xl mb-3">
-                        <Search className="ml-2 w-5 h-5 text-black/70" />
-                        <Input
-                            type="tel"
-                            placeholder="Ketik Nomor Anda"
-                            className="z-[50] py-2 focus-visible:ring-0 focus-visible:border-0 w-[200px] mx-auto focus-visible:ring-offset-0 text-black/80 bg-transparent border-0"
-                            onChange={(e) => setSearch(e.target.value)}
-                            value={search}
+        <div className="bg-[#083247] w-full md:py-32 py-24 overflow-hidden">
+            <div className="max-w-for-monitor mx-auto md:px-3 overflow-hidden md:mb-20 mb-28 flex h-auto item-center justify-between">
+                <div className="flex flex-col gap-y-2 md:px-0 px-3 items-start justify-center text-center font-semibold text-[#e9f3f4] dark:text-neutral-400">
+                    <div className="bg-[#e9f3f4] rounded-sm text-[#083247] py-1 px-2 font-normal text-xs tracking-wider">
+                        Dinas Perumahan dan Kawasan Permukiman Kota Gorontalo
+                    </div>
+                    <h1 className="lg:text-6xl text-4xl font-bold mb-3">
+                        Layanan Pengaduan
+                    </h1>
+                    <FlipWords
+                        words={words}
+                        className="text-gray-800 bg-yellow-300 pl-3 pr-1 rounded-xl py-1.5 font-bold lg:text-6xl text-4xl"
+                    />
+                    <p className="md:text-xl my-5 md:max-w-md text-start text-lg text-[#b6bac5]">
+                        Sampaikan laporan Anda langsung kepada instansi
+                        pemerintah berwenang
+                    </p>
+                    <div className="flex">
+                        <div className="inline-flex items-center bg-white/80 rounded-lg max-w-xl mb-3">
+                            <Search className="ml-2 w-5 h-5 text-black/70" />
+                            <Input
+                                id="search"
+                                type="tel"
+                                placeholder="Ketik Nomor Anda"
+                                className="z-[50] py-2 focus-visible:ring-0 focus-visible:border-0 w-[200px] mx-auto focus-visible:ring-offset-0 text-black/80 bg-transparent border-0"
+                                onChange={(e) => setSearch(e.target.value)}
+                                value={search}
+                            />
+                        </div>
+                        <Button
+                            // variant={"secondary"}
+                            size={"lg"}
+                            onClick={handleSearch}
+                            className="ml-2 px-4 text-normal bg-[#348d9d] hover:bg-[#2c7785] active:scale-90 duration-300 transition"
+                        >
+                            Cari Laporan
+                        </Button>
+                    </div>
+                </div>
+                <div className="hidden md:flex flex-col items-start justify-center">
+                    <div className="max-w-md overflow-hidden rounded-xl">
+                        <img
+                            src="/image/bg-header.jpg"
+                            className="max-w-md h-auto rounded-xl hover:scale-105 transition duration-300"
+                            alt="Lapor Vector"
                         />
                     </div>
-                    <Button
-                        onClick={handleSearch}
-                        className="ml-2 bg-[#348d9d] active:scale-90 duration-300 transform"
-                    >
-                        Cari Laporan
-                    </Button>
                 </div>
-            </div>
-            <div className="hidden md:flex flex-col items-start justify-center -mt-20">
-                <img
-                    src="/image/lapor-vector.png"
-                    className="max-w-sm h-auto"
-                    alt="Lapor Vector"
-                />
             </div>
         </div>
     );
 }
 
-function Fitur() {
+function AlurPengaduan() {
+    const isDesktop = useMediaQuery("(min-width: 768px)");
+
+    const cardVariants: Variants = {
+        offscreen: {
+            y: 200,
+        },
+        onscreen: {
+            y: 0,
+            // rotate: -10,
+            transition: {
+                type: "bounce",
+                bounce: 0.4,
+                duration: 1.3,
+            },
+        },
+    };
+
+    const data = [
+        {
+            number: "1",
+            title: "Ajukan Pengaduan",
+            description: `Mulailah dengan mengisi formulir pengaduan secara online, yang mencakup deskripsi rinci mengenai masalah yang Anda hadapi. Anda dapat menyertakan foto atau bukti pendukung untuk memperjelas laporan Anda. Proses ini dapat dilakukan melalui perangkat apa saja, kapan saja.`,
+        },
+        {
+            number: "2",
+            title: "Proses Verifikasi",
+            description: `Setelah pengaduan Anda diterima, tim Disperkim akan melakukan verifikasi untuk memastikan keakuratan informasi dan keabsahan masalah yang dilaporkan. Jika diperlukan, tim akan menghubungi Anda untuk klarifikasi lebih lanjut sebelum memprosesnya lebih lanjut.`,
+        },
+        {
+            number: "3",
+            title: "Tindak Lanjut",
+            description: `Setelah pengaduan diverifikasi, tim terkait akan segera mengambil langkah-langkah untuk menyelesaikan masalah yang dilaporkan. Solusi yang diberikan akan sesuai dengan kebijakan dan prioritas yang ada, dengan tujuan untuk menyelesaikan masalah secepat mungkin.`,
+        },
+        {
+            number: "4",
+            title: "Notifikasi",
+            description: `Selama proses penyelesaian, Anda akan mendapatkan pembaruan status pengaduan melalui email atau notifikasi di aplikasi. Anda akan diberi tahu jika ada perkembangan baru, seperti perubahan status atau penyelesaian masalah, sehingga Anda selalu mengetahui status pengaduan Anda.`,
+        },
+    ];
+
     return (
-        <div
+        <motion.div
             id="about"
-            className="w-full h-auto bg-[#083247] lg:py-20 lg:px-32 md:p-10 p-5"
+            className="w-full h-auto bg-[#083247] lg:py-20 lg:px-32 md:p-10 px-5 py-10 overflow-hidden"
+            initial="offscreen"
+            whileInView="onscreen"
+            viewport={{
+                once: true,
+                amount: isDesktop ? 0.6 : 0.3,
+            }}
         >
             {/* <p className="text-[#126792]">STEP</p> */}
-            <h1 className="text-white md:text-4xl text-lg">
+            <h1 className="text-white md:text-4xl text-2xl font-bold text-center md:text-start">
                 Alur Pengaduan Disperkim
             </h1>
-            <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-5 mt-10">
-                <div className="bg-[#113a4e] rounded-lg h-auto space-y-2 p-5 text-white">
-                    <h1 className="text-7xl font-bold font-sans text-transparent bg-clip-text bg-gradient-to-b from-white to-[#113a4e]">
-                        1
-                    </h1>
-                    <h2 className="text-xl font-bold text-[#1989c2]">
-                        Ajukan Pengaduan
-                    </h2>
-                    <p className="text-sm text-gray-300">
-                        Mulailah dengan mengisi formulir pengaduan secara
-                        online, yang mencakup deskripsi rinci mengenai masalah
-                        yang Anda hadapi. Anda dapat menyertakan foto atau bukti
-                        pendukung untuk memperjelas laporan Anda. Proses ini
-                        dapat dilakukan melalui perangkat apa saja, kapan saja.
-                    </p>
-                </div>
-                <div className="bg-[#113a4e] rounded-lg h-auto space-y-2 p-5 text-white">
-                    <h1 className="text-7xl font-bold font-sans text-transparent bg-clip-text bg-gradient-to-b from-white to-[#113a4e]">
-                        2
-                    </h1>
-                    <h2 className="text-xl font-bold text-[#1989c2]">
-                        Proses Verifikasi
-                    </h2>
-                    <p className="text-sm text-gray-300">
-                        Setelah pengaduan Anda diterima, tim Disperkim akan
-                        melakukan verifikasi untuk memastikan keakuratan
-                        informasi dan keabsahan masalah yang dilaporkan. Jika
-                        diperlukan, tim akan menghubungi Anda untuk klarifikasi
-                        lebih lanjut sebelum memprosesnya lebih lanjut.
-                    </p>
-                </div>
-                <div className="bg-[#113a4e] rounded-lg h-auto space-y-2 p-5 text-white">
-                    <h1 className="text-7xl font-bold font-sans text-transparent bg-clip-text bg-gradient-to-b from-white to-[#113a4e]">
-                        3
-                    </h1>
-                    <h2 className="text-xl font-bold text-[#1989c2]">
-                        Tindak Lanjut
-                    </h2>
-                    <p className="text-sm text-gray-300">
-                        Setelah pengaduan diverifikasi, tim terkait akan segera
-                        mengambil langkah-langkah untuk menyelesaikan masalah
-                        yang dilaporkan. Solusi yang diberikan akan sesuai
-                        dengan kebijakan dan prioritas yang ada, dengan tujuan
-                        untuk menyelesaikan masalah secepat mungkin.
-                    </p>
-                </div>
-                <div className="bg-[#113a4e] rounded-lg h-auto space-y-2 p-5 text-white">
-                    <h1 className="text-7xl font-bold font-sans text-transparent bg-clip-text bg-gradient-to-b from-white to-[#113a4e]">
-                        4
-                    </h1>
-                    <h2 className="text-xl font-bold text-[#1989c2]">
-                        Notifikasi
-                    </h2>
-                    <p className="text-sm text-gray-300">
-                        Selama proses penyelesaian, Anda akan mendapatkan
-                        pembaruan status pengaduan melalui email atau notifikasi
-                        di aplikasi. Anda akan diberi tahu jika ada perkembangan
-                        baru, seperti perubahan status atau penyelesaian
-                        masalah, sehingga Anda selalu mengetahui status
-                        pengaduan Anda.
-                    </p>
-                </div>
-            </div>
-        </div>
+            <motion.div
+                variants={cardVariants}
+                className="grid md:grid-cols-2 xl:grid-cols-4 gap-5 mt-10"
+            >
+                {data.map((card, index) => (
+                    <MyCard
+                        key={index}
+                        number={card.number}
+                        title={card.title}
+                        body={card.description}
+                    />
+                ))}
+            </motion.div>
+        </motion.div>
     );
 }
 
 function WhyUs() {
+    const counts = [
+        useMotionValue(0),
+        useMotionValue(0),
+        useMotionValue(0),
+        useMotionValue(0),
+    ];
+    const roundedCounts = counts.map((count) =>
+        useTransform(count, (value) => Math.round(value))
+    );
+    const [scope, animate] = useAnimate();
+    const isInView = useInView(scope);
+
+    useEffect(() => {
+        if (isInView) {
+            // Target angka untuk masing-masing animasi
+            const targets = [100, 152, 10000, 1000];
+            targets.forEach((target, index) => {
+                animate(counts[index], target, {
+                    duration: 2,
+                    ease: "easeOut",
+                });
+            });
+        }
+    }, [isInView]);
+
     return (
-        <div className="w-full h-auto py-10 text-center">
-            <div className="max-w-screen-lg mx-auto space-y-3">
+        <div id="whyus" className="w-full h-auto py-10 text-center">
+            <div className="max-w-screen-lg mx-auto space-y-3 px-3">
                 <h2 className="uppercase text-[#348d9d] font-semibold text-xl">
                     Why Us
                 </h2>
-                <h1 className="text-3xl max-w-screen-sm mx-auto text-[#1d1e20] font-bold">
+                <h1 className="text-2xl md:text-4xl max-w-3xl md:leading-[3rem] leading-[2.5rem] mx-auto text-[#1d1e20] font-bold">
                     Kami memberikan solusi cepat, transparan, dan tanggap
                     terhadap setiap pengaduan masyarakat.
                 </h1>
-                <p className="text-gray-500 w-[21rem] mx-auto font-semibold pt-7">
+                <p className="text-gray-500 max-w-lg text-xl mx-auto font-semibold pt-7">
                     Lebih dari 10.000 laporan berhasil ditangani dan
                     penyelesaian rata-rata dalam 3 hari kerja.
                 </p>
             </div>
-            <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-5 pt-10 max-w-screen-lg mx-auto">
-                <div className="">
-                    <h1 className="font-bold text-7xl text-[#1d1e20]">100</h1>
-                    <p className="font-semibold text-[#083247] text-lg">
+            <div
+                ref={scope}
+                className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-5 pt-14 max-w-6xl mx-auto md:space-y-0 space-y-8"
+            >
+                <div className="space-y-5">
+                    <motion.pre className="font-bold text-7xl text-yellow-400">
+                        {roundedCounts[0]}
+                    </motion.pre>
+                    <p className="font-semibold text-gray-800 text-xl">
                         Laporan belum diproses
                     </p>
                 </div>
-                <div className="">
-                    <h1 className="font-bold text-7xl text-[#1d1e20]">152</h1>
-                    <p className="font-semibold text-[#083247] text-lg">
+                <div className="space-y-5">
+                    <motion.pre className="font-bold text-7xl text-yellow-400">
+                        {roundedCounts[1]}
+                    </motion.pre>
+                    <p className="font-semibold text-gray-800 text-xl">
                         Laporan sedang diproses
                     </p>
                 </div>
-                <div className="">
-                    <h1 className="font-bold text-7xl text-[#1d1e20]">10k+</h1>
-                    <p className="font-semibold text-[#083247] text-lg">
+                <div className="space-y-5">
+                    <motion.pre className="font-bold text-7xl text-yellow-400">
+                        {roundedCounts[2]}
+                    </motion.pre>
+                    <p className="font-semibold text-gray-800 text-xl">
                         Laporan selesai diproses
                     </p>
                 </div>
-                <div className="">
-                    <h1 className="font-bold text-7xl text-[#1d1e20]">1k+</h1>
-                    <p className="font-semibold text-[#083247] text-lg">
+                <div className="space-y-5">
+                    <motion.pre className="font-bold text-7xl text-yellow-400">
+                        {roundedCounts[3]}
+                    </motion.pre>
+                    <p className="font-semibold text-gray-800 text-xl">
                         Laporan ditolak
                     </p>
                 </div>
@@ -307,7 +309,12 @@ function AnimatedTestimonialsDemo() {
         },
     ];
     return (
-        <div className="w-full">
+        <div className="w-full py-10">
+            <div className="max-w-5xl mx-auto text-center">
+                <h2 className="uppercase text-[#348d9d] font-semibold text-xl">
+                    Testimoni
+                </h2>
+            </div>
             <AnimatedTestimonials testimonials={testimonials} />
         </div>
     );
@@ -412,7 +419,7 @@ function Pertanyaan() {
 
 function Footer() {
     return (
-        <div className="w-full pb-[10rem] bg-[#f5f9f9] p-5 md:flex justify-around gap-5 text-[#083247]">
+        <div className="w-full pb-[10rem] bg-[#083247] p-5 md:flex justify-around gap-5 text-gray-100">
             <div className="h-full">
                 <Link
                     href="https://flowbite.com/"
@@ -424,10 +431,10 @@ function Footer() {
                         alt="Flowbite Logo"
                     />
                     <div className="-space-y-2">
-                        <p className="self-center text-xl font-bold whitespace-nowrap text-gray-800">
+                        <p className="self-center text-xl font-bold whitespace-nowrap">
                             DISPERKIM
                         </p>
-                        <p className="self-center text-md font-bold whitespace-nowrap text-gray-800">
+                        <p className="self-center text-md font-bold whitespace-nowrap">
                             KOTA GORONTALO
                         </p>
                     </div>

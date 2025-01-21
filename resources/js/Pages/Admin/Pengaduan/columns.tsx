@@ -112,7 +112,7 @@ export const columns: ColumnDef<Complaint>[] = [
         },
     },
     {
-        accessorKey: "statuses.new_status",
+        accessorKey: "statuses.status",
         id: "Status",
         filterFn: "arrIncludesSome",
         header: ({ column }) => {
@@ -137,13 +137,13 @@ export const columns: ColumnDef<Complaint>[] = [
                 React.useState<Status | null>(
                     statuses.find(
                         (status) =>
-                            status.label === complaint.statuses.new_status
+                            status.label === complaint.statuses.status
                     ) || null
                 );
 
             const [isLoading, setIsLoading] = useState(false);
 
-            const handlePublishToggle = (newStatus: Status | null) => {
+            const handleStatus = (newStatus: Status | null) => {
                 if (isLoading) return;
 
                 setIsLoading(true);
@@ -152,7 +152,7 @@ export const columns: ColumnDef<Complaint>[] = [
                     new Promise<void>((resolve, reject) => {
                         router.put(
                             `/complaint/${complaint.id}`,
-                            { new_status: newStatus?.label },
+                            { status: newStatus?.label },
                             {
                                 preserveScroll: true,
                                 onSuccess: () => {
@@ -206,7 +206,7 @@ export const columns: ColumnDef<Complaint>[] = [
                             <StatusList
                                 setOpen={setOpen}
                                 setSelectedStatus={setSelectedStatus}
-                                handlePublishToggle={handlePublishToggle}
+                                handleStatus={handleStatus}
                             />
                         </PopoverContent>
                     </Popover>
@@ -240,7 +240,7 @@ export const columns: ColumnDef<Complaint>[] = [
                             <StatusList
                                 setOpen={setOpen}
                                 setSelectedStatus={setSelectedStatus}
-                                handlePublishToggle={handlePublishToggle}
+                                handleStatus={handleStatus}
                             />
                         </div>
                     </DrawerContent>
@@ -269,7 +269,7 @@ export const columns: ColumnDef<Complaint>[] = [
         //     // const createdAt = row.original.created_at;
         //     // const formatted = dayjs(createdAt).fromNow();
 
-        //     // return <span className="font-medium">{created_}</span>;
+        //     // return <span className="font-medium">{createdAt}</span>;
         // },
     },
 ];
@@ -277,11 +277,11 @@ export const columns: ColumnDef<Complaint>[] = [
 function StatusList({
     setOpen,
     setSelectedStatus,
-    handlePublishToggle,
+    handleStatus,
 }: {
     setOpen: (open: boolean) => void;
     setSelectedStatus: (status: Status | null) => void;
-    handlePublishToggle: (newStatus: Status | null) => void;
+    handleStatus: (newStatus: Status | null) => void;
 }) {
     return (
         <Command>
@@ -301,8 +301,7 @@ function StatusList({
                                     statuses.find(
                                         (priority) => priority.value === value
                                     ) || null;
-                                console.log(newStatus);
-                                handlePublishToggle(newStatus);
+                                handleStatus(newStatus);
                                 setOpen(false);
                             }}
                         >

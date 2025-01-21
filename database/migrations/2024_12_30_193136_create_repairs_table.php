@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('repairs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->cascadeOnDelete();
             $table->foreignId('item_id')->cascadeOnDelete();
-            $table->float('latitude');
-            $table->float('longitude');
+            $table->foreignId('complaint_id')->cascadeOnDelete();
+            $table->double('latitude');
+            $table->double('longitude');
             $table->string('note');
             $table->timestamps();
         });

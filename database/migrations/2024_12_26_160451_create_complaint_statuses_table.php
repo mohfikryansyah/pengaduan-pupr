@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('complaint_statuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('complaint_id')->constrained()->cascadeOnDelete();
-            $table->string('new_status');
+            $table->string('status');
             $table->string('note')->nullable();
             $table->timestamps();
         });

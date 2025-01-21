@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ComplaintFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Routing\Controller;
 
 class ComplaintController extends Controller
 {
@@ -35,9 +36,9 @@ class ComplaintController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:80|min:2',
             'message' => 'required|string',
-            'number' => 'required|string',
+            'telp' => 'required|numeric|min_digits:9|max_digits:15',
             'latitude' => 'required',
             'longitude' => 'required',
             'audio' => 'nullable|file',
@@ -50,10 +51,9 @@ class ComplaintController extends Controller
             $complaint = Complaint::create([
                 'name' => $validatedData['name'],
                 'message' => $validatedData['message'],
-                'number' => $validatedData['number'],
+                'telp' => $validatedData['telp'],
                 'latitude' => $validatedData['latitude'] = (double) $request['longitude'],
                 'longitude' => $validatedData['longitude'] = (double) $request['latitude'],
-                'code' => $validatedData['code'] = 'LAPOR-' . Str::random(6),
             ]);
 
             $complaint->statuses()->create([
@@ -76,6 +76,7 @@ class ComplaintController extends Controller
             }
 
             DB::commit();
+            return redirect()->back();
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->back()->with('error', $th->getMessage());
@@ -108,10 +109,10 @@ class ComplaintController extends Controller
     public function update(Request $request, Complaint $complaint)
     {
         $request->validate([
-            'new_status' => 'required',
+            'status' => 'required',
         ]);
 
-        $complaint->statuses()->create($request->only('new_status'));
+        $complaint->statuses()->create($request->only('status'));
 
         return redirect()->back()->with('sucess', 'Berhasil mengirimkan penguduan!');
     }

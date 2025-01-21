@@ -15,7 +15,7 @@ export interface Item {
 export interface ComplaintStatus {
     id: number;
     complaint_id: number;
-    new_status: string;
+    status: string;
     note: string;
 }
 
@@ -33,6 +33,17 @@ export interface Complaint {
     audio: string;
     files: ComplaintFile[];
     statuses: ComplaintStatus;
+    created_at: string;
+}
+
+export interface Repair {
+    id: number;
+    user: User[];
+    item: Item[];
+    complaint: Complaint[];
+    latitude: number;
+    longitude: number;
+    note: string;
     created_at: string;
 }
 

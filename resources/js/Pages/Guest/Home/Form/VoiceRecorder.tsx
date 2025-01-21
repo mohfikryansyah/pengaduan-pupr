@@ -2,7 +2,7 @@ import { Toggle } from "@/Components/ui/toggle";
 import { Mic } from "lucide-react";
 import { useState } from "react";
 
-export default function VoiceRecorder ({
+export default function VoiceRecorder({
     onAudioReady,
 }: {
     onAudioReady: (audio: Blob) => void;
@@ -50,21 +50,19 @@ export default function VoiceRecorder ({
     };
 
     return (
-        <>
-            <div className="md:flex items-center space-x-3 md:space-y-0 space-y-3">
-                <Toggle
-                    onClick={isRecording ? stopRecording : startRecording}
-                    className="bg-gray-100 data-[state=on]:bg-red-500 data-[state=on]:text-white"
-                >
-                    <Mic />
-                    {isRecording ? "Sedang merekam" : "Mulai merekam"}
-                </Toggle>
+        <div className="md:flex items-center space-x-3 md:space-y-0 space-y-3">
+            <Toggle
+                onClick={isRecording ? stopRecording : startRecording}
+                className="bg-gray-100 data-[state=on]:bg-red-500 data-[state=on]:text-white"
+            >
+                <Mic />
+                {isRecording ? "Sedang merekam" : "Mulai merekam"}
+            </Toggle>
 
-                {audioURL && <CustomAudioPlayer audioURL={audioURL} />}
-            </div>
-        </>
+            {audioURL && <CustomAudioPlayer audioURL={audioURL} />}
+        </div>
     );
-};
+}
 
 const CustomAudioPlayer = ({ audioURL }: { audioURL: string }) => {
     return (

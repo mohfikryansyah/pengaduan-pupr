@@ -51,12 +51,12 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         // 500 Internal Server Error
-        $exceptions->renderable(function (\Throwable $e) {
-            if (!($e instanceof HttpException)) {
-                return Inertia::render('Errors/500')
-                    ->toResponse(request())
-                    ->setStatusCode(500);
-            }
-        });
+        // $exceptions->renderable(function (\Throwable $e) {
+        //     if (!($e instanceof HttpException)) {
+        //         return Inertia::render('Errors/500')
+        //             ->toResponse(request())
+        //             ->setStatusCode(500);
+        //     }
+        // });
     })
     ->create();

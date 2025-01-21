@@ -12,8 +12,8 @@ class ComplaintStatus extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    protected $fillable = ['complaint_id', 'new_status', 'note'];
-    protected $attributes = ['new_status' => 'Belum diproses'];
+    protected $fillable = ['complaint_id', 'status', 'note'];
+    protected $attributes = ['status' => 'Belum diproses'];
 
     public function complaint(): BelongsTo
     {

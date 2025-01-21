@@ -29,17 +29,17 @@ import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
 import { Button } from "@/Components/ui/button";
 import { FileUpload } from "@/Components/ui/file-upload";
-import { formSchema } from "@/lib/FormPengaduan/schema";
+import { FormPengaduan as FormPengaduanSchema } from "@/lib/FormPengaduan/schema";
 import { Coordinates } from "@/lib/FormPengaduan/type";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import NumberInput from "@/Components/NumberInput";
 
 export default function FormPengaduan() {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof FormPengaduanSchema>>({
+        resolver: zodResolver(FormPengaduanSchema),
         defaultValues: {
             name: "",
-            number: "",
+            telp: "",
             message: "",
             audio: undefined,
             latitude: "",
@@ -59,7 +59,7 @@ export default function FormPengaduan() {
                 toast.success("Pengaduan berhasil dikirim!");
                 form.reset();
                 form.setValue("audio", undefined);
-                form.setValue("number", "");
+                form.setValue("telp", "");
             },
             onError: (errors) => {
                 toast.error("Terjadi Kesalahan");
@@ -74,10 +74,10 @@ export default function FormPengaduan() {
             y: isDesktop ? 10 : 50,
         },
         onscreen: {
-            y: isDesktop ? -90 : -40,
+            y: isDesktop ? -90 : -100,
             // rotate: -10,
             transition: {
-                type: "bounce",
+                type: "spring",
                 bounce: 0.4,
                 duration: 1,
             },
@@ -89,22 +89,25 @@ export default function FormPengaduan() {
         form.setValue("longitude", coords.lng);
     };
 
+    const [currentLocation, setCurrentLocation] = useState<{
+        lat: number;
+        lng: number;
+    } | null>(null);
+
     return (
-        <motion.div
-            className="relative min-h-[90vh] bg-white -mt-16 md:rounded-t-[4rem] rounded-3xl p-4 md:p-0 z-[50]"
-            initial="offscreen"
-            whileInView="onscreen"
-            viewport={{
-                once: true,
-                amount: isDesktop ? 0.6 : 0.3,
-            }}
-        >
+        <div className="relative min-h-[90vh] bg-white -mt-16 md:rounded-t-[4rem] rounded-3xl p-4 md:p-0 z-[50]">
             <motion.div
-                className="mx-auto lg:max-w-screen-lg w-full z-[1] bg-white shadow-xl p-6 rounded-2xl"
+                className="mx-auto lg:max-w-5xl w-full bg-gray-50 shadow-xl p-6 rounded-2xl"
                 variants={cardVariants}
+                initial="offscreen"
+                whileInView="onscreen"
+                viewport={{
+                    once: true,
+                    amount: isDesktop ? 0.6 : 0.3,
+                }}
             >
                 <div className="w-full p-4 rounded-lg bg-[#348d9d] flex items-center justify-between">
-                    <h1 className="text-white font-semibold md:text-2xl text-lg">
+                    <h1 className="text-gray-100 font-semibold md:text-2xl text-lg">
                         Sampaikan Laporan Anda
                     </h1>
 
@@ -133,51 +136,53 @@ export default function FormPengaduan() {
                             encType="multipart/form-data"
                             className="space-y-4"
                         >
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Nama
-                                            <span className="text-red-500">
-                                                *
-                                            </span>
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Ketikkan Nama Anda"
-                                                {...field}
-                                                className="focus-visible:ring-[#063b3e]"
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="number"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Nomor HP
-                                            <span className="text-red-500">
-                                                *
-                                            </span>
-                                        </FormLabel>
-                                        <FormControl>
-                                            <NumberInput
-                                                type="tel"
-                                                placeholder="Masukkan nomor HP Anda"
-                                                {...field}
-                                                className="focus-visible:ring-[#063b3e] block h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background md:text-sm"
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            <div className="grid md:grid-cols-2 gap-x-5">
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Nama
+                                                <span className="text-red-500">
+                                                    *
+                                                </span>
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Ketikkan Nama Anda"
+                                                    {...field}
+                                                    className="focus-visible:ring-[#063b3e]"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="telp"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Nomor HP
+                                                <span className="text-red-500">
+                                                    *
+                                                </span>
+                                            </FormLabel>
+                                            <FormControl>
+                                                <NumberInput
+                                                    type="tel"
+                                                    placeholder="Masukkan nomor HP Anda"
+                                                    {...field}
+                                                    className="focus-visible:ring-[#063b3e] block h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background md:text-sm"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                             <FormField
                                 control={form.control}
                                 name="message"
@@ -257,12 +262,65 @@ export default function FormPengaduan() {
                                     </FormItem>
                                 )}
                             />
-                            <div className="space-y-2">
-                                <FormLabel>Pilih Lokasi di Peta</FormLabel>
+                            <div className="space-y-2 w-full">
+                                <div className="md:flex items-center gap-x-1">
+                                    <FormLabel>Pilih Lokasi di Peta </FormLabel>
+                                    <span className="text-sm font-medium">
+                                        atau {" "}
+                                    </span>
+                                    <button
+                                        type="button"
+                                        className="text-sm font-medium text-blue-500 underline"
+                                        onClick={() => {
+                                            if (navigator.geolocation) {
+                                                navigator.geolocation.getCurrentPosition(
+                                                    (position) => {
+                                                        const {
+                                                            latitude,
+                                                            longitude,
+                                                        } = position.coords;
+                                                        form.setValue(
+                                                            "latitude",
+                                                            latitude
+                                                        );
+                                                        form.setValue(
+                                                            "longitude",
+                                                            longitude
+                                                        );
+                                                        setCurrentLocation({
+                                                            lat: latitude,
+                                                            lng: longitude,
+                                                        });
+                                                        toast.success(
+                                                            "Lokasi berhasil diambil!"
+                                                        );
+                                                        console.log(
+                                                            latitude,
+                                                            longitude
+                                                        );
+                                                    },
+                                                    (error) => {
+                                                        toast.error(
+                                                            "Tidak dapat mengambil lokasi: " +
+                                                                error.message
+                                                        );
+                                                    }
+                                                );
+                                            } else {
+                                                toast.error(
+                                                    "Geolocation tidak didukung di browser ini."
+                                                );
+                                            }
+                                        }}
+                                    >
+                                        Gunakan Lokasi saat ini
+                                    </button>
+                                </div>
                                 <MyMapComponent
                                     onCoordinatesChange={
                                         handleCoordinatesChange
                                     }
+                                    currentLocation={currentLocation}
                                 />
                             </div>
                             <FormField
@@ -315,6 +373,6 @@ export default function FormPengaduan() {
                     </Form>
                 </div>
             </motion.div>
-        </motion.div>
+        </div>
     );
 }

@@ -116,6 +116,18 @@ export function NavMain({
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </Link>
+                <Link href="/repair">
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            {...(url === "/repair"
+                                ? { isActive: true }
+                                : {})}
+                        >
+                            <CheckCircle />
+                            <span className="truncate">Data Perbaikan</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </Link>
                 <Link href="/item">
                     <SidebarMenuItem>
                         <SidebarMenuButton

@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
             $table->string('name');
-            $table->string('number')->max(15);
-            $table->string('message');
+            $table->string('telp')->max(15);
+            $table->text('message');
             $table->double('latitude');
             $table->double('longitude');
             $table->string('audio')->nullable();

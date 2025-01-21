@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Complaint;
+use App\Models\ComplaintStatus;
 use App\Models\Item;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\User;
@@ -16,6 +18,8 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         Item::factory(10)->create();
+        // Complaint::factory(18)->create();
+        ComplaintStatus::factory(18)->create();
 
         User::factory()->create([
             'name' => 'Test User',

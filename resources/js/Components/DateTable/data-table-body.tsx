@@ -20,13 +20,14 @@ export function TableContent<TData>({
     columns,
 }: TableContentProps<TData>) {
     return (
-        <div className="rounded-md border">
+        <div className="overflow-hidden rounded-xl">
+            <div className="rounded-md">
             <Table>
-                <TableHeader>
+                <TableHeader className="group">
                     {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id}>
+                        <TableRow key={headerGroup.id} className="bg-slate-800 group-hover:bg-slate-900">
                             {headerGroup.headers.map((header) => (
-                                <TableHead key={header.id}>
+                                <TableHead key={header.id} className="text-white">
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(
@@ -42,6 +43,7 @@ export function TableContent<TData>({
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow
+                            className="bg-gray-100"
                                 key={row.id}
                                 data-state={row.getIsSelected() && "selected"}
                             >
@@ -67,6 +69,7 @@ export function TableContent<TData>({
                     )}
                 </TableBody>
             </Table>
+        </div>
         </div>
     );
 }

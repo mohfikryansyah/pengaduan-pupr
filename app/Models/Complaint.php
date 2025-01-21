@@ -36,4 +36,9 @@ class Complaint extends Model
     {
         return $this->hasOne(ComplaintStatus::class, 'complaint_id')->latestOfMany();
     }
+
+    public function repair(): HasOne
+    {
+        return $this->hasOne(Repair::class, 'complaint_id');
+    }
 }

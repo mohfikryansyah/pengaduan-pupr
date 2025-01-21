@@ -8,38 +8,79 @@ import {
     SheetTrigger,
 } from "@/Components/ui/sheet";
 import { Button } from "@/Components/ui/button";
-import { ArrowRight, MenuIcon } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 import "../../../../css/style.css";
 import { PageProps } from "@/types";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+
+const navbar = [
+    {
+        url: "#",
+        label: "Home",
+    },
+    {
+        url: "#about",
+        label: "About",
+    },
+    {
+        url: "#whyus",
+        label: "WhyUs",
+    },
+    {
+        url: "#",
+        label: "About",
+    },
+];
 
 export default function Navbar() {
     const { auth } = usePage<PageProps>().props;
     const [scrollY, setScrollY] = useState<number>(0);
-
-    const handleScroll = useCallback((): void => {
-        setScrollY(window.scrollY);
-    }, []);
+    const navbarRef = useRef<HTMLElement | null>(null);
+    const logoRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        window.addEventListener("scroll", handleScroll);
+        const handleScroll = (): void => {
+            const scrollY = window.scrollY;
+            setScrollY(scrollY);
+            const navbar = navbarRef.current;
+            const logo = logoRef.current;
+            // if (navbar) {
+            //     if (scrollY > 0) {
+            //         navbar.classList.add("bg-white/80", "shadow-md", "backdrop-filter");
+            //         navbar.classList.remove("bg-transparent");
+            //         logo!.classList.add("text-gray-800");
+            //         logo!.classList.remove("text-gray-50");
+            //     } else {
+            //         navbar.classList.add("bg-transparent");
+            //         navbar.classList.remove("bg-white/80", "shadow-md", "backdrop-filter");
+            //         logo!.classList.remove("text-gray-800");
+            //         logo!.classList.add("text-gray-50");
+            //     }
+            // }
+            if (navbar) {
+                if (scrollY > 0) {
+                    navbar.classList.add("bg-[#083247]", "shadow-md");
+                } else {
+                    navbar.classList.remove("bg-[#083247]", "shadow-md");
+                }
+            }
+        };
 
+        window.addEventListener("scroll", handleScroll);
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, [handleScroll]);
+    }, []);
 
     return (
         <nav
+            ref={navbarRef}
             className={cn(
-                "fixed w-full z-[51] top-0 border-gray-200 dark:bg-gray-900 lg:px-12 px-6 duration-500",
-                scrollY > 0
-                    ? "bg-white/80 shadow-md backdrop-filter"
-                    : "bg-transparent"
+                "fixed w-full z-[121] top-0 border-gray-200 dark:bg-gray-900 lg:px-12 px-6 duration-500"
             )}
         >
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-3">
+            <div className="max-w-for-monitor flex flex-wrap items-center justify-between mx-auto py-3">
                 <Link
                     href="https://flowbite.com/"
                     className="flex items-center space-x-3 rtl:space-x-reverse"
@@ -49,16 +90,16 @@ export default function Navbar() {
                         className="w-9 h-auto"
                         alt="Flowbite Logo"
                     />
-                    <div className="-space-y-2">
-                        <p className="self-center text-xl font-bold whitespace-nowrap text-gray-800">
+                    <div ref={logoRef} className="-space-y-2 text-gray-50">
+                        <p className="self-center text-xl font-bold whitespace-nowrap">
                             DISPERKIM
                         </p>
-                        <p className="self-center text-md font-bold whitespace-nowrap text-gray-800">
+                        <p className="self-center text-md font-bold whitespace-nowrap">
                             KOTA GORONTALO
                         </p>
                     </div>
                 </Link>
-                {/* <div className="md:hidden flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse"> */}
+
                 <Sheet>
                     <SheetTrigger asChild>
                         <Button
@@ -77,79 +118,53 @@ export default function Navbar() {
                             <SheetTitle>Are you absolutely sure?</SheetTitle>
                             <SheetDescription>
                                 This action cannot be undone. This will
-                                permanently // delete your account and remove
+                                permanently delete your account and remove all
+                                data.
                             </SheetDescription>
                         </SheetHeader>
                     </SheetContent>
                 </Sheet>
-                {/* </div> */}
 
                 <div
                     className="hidden w-full md:block md:w-auto"
                     id="navbar-default"
                 >
-                    <ul className="font-medium -ml-[7rem] flex flex-col p-4 md:py-1 mt-4 border border-gray-100 rounded-lg bg-gray-800 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 text-lg">
-                        {/* <li>
-                            <DropdownMenuDemo />
-                        </li> */}
-                        <li>
-                            <Link
-                                href="/"
-                                className="block py-2 px-3 text-gray-800 bg-blue-700 rounded md:bg-transparent md:text-gray-800 md:p-0 dark:text-white md:dark:text-blue-500"
-                                aria-current="page"
+                    <ul
+                        className={cn(
+                            "font-medium -ml-[7rem] flex flex-col p-4 md:py-1 mt-4 border border-gray-100 rounded-lg bg-gray-800 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 text-lg text-gray-50"
+                        )}
+                    >
+                        {navbar.map((nav, index) => (
+                            <li key={index}
                             >
-                                Home
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                href="#about"
-                                className="block py-2 px-3 text-gray-800 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                            >
-                                About
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                href="/"
-                                className="block py-2 px-3 text-gray-800 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                            >
-                                Service
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                href="#"
-                                className="block py-2 px-3 text-gray-800 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                            >
-                                Pricing
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                href="#"
-                                className="block py-2 px-3 text-gray-800 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 underline-grow transition duration-300 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                            >
-                                Contact
-                            </Link>
-                        </li>
+                                <a
+                                    href={nav.url}
+                                    className="block rounded md:bg-transparent md:p-0 hover:text-blue-400 transition duration-300"
+                                    aria-current="page"
+                                >
+                                    {nav.label}
+                                </a>
+                            </li>
+                        ))}
                         <li className="active:scale-90 duration-300">
                             {auth.user ? (
                                 <Link
                                     href={route("dashboard")}
-                                    className="text-white bg-slate-800 font-medium rounded-xl text-md px-4 pt-1.5 pb-2 active:scale-90 duration-300 transform text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                    className={cn(
+                                        "border font-medium rounded-xl text-md px-4 pt-1 pb-1.5 active:scale-90 duration-300 transform text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-gray-50 outline-none"
+                                    )}
                                 >
                                     Dashboard
                                 </Link>
                             ) : (
-                                <>
-                                    <Link
-                                        href={route("login")}
-                                        className="text-white bg-slate-800  font-medium rounded-xl text-md px-4 pt-1.5 pb-2 active:scale-90 duration-300 transform text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                    >
-                                        Log in
-                                    </Link>
-                                </>
+                                <Link
+                                    href={route("login")}
+                                    className={cn(
+                                        "border font-medium rounded-xl text-md px-4 pt-1 pb-1.5 active:scale-90 hover:duration-300 transform text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 outline-none border-gray-50"
+                                    )}
+                                >
+                                    Login
+                                </Link>
                             )}
                         </li>
                     </ul>

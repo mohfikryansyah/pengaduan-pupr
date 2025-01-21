@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
+use Inertia\Inertia;
 use App\Models\Repair;
+use App\Models\Complaint;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RepairController extends Controller
 {
@@ -12,7 +16,16 @@ class RepairController extends Controller
      */
     public function index()
     {
-        //
+        // $complaints = Complaint::latest()->get();
+        // $complaint
+        return Inertia::render('Admin/Repair/Index-repair', [
+            'repairs' => Repair::latest()->get(),
+            'items' => Item::latest()->get(),
+            // 'complaints' => Complaint::whereHas('statuses', function ($query) {
+            //     $query->where('status', 'Belum diproses');
+            // })->latest()->get(),
+            'complaints' => Complaint::latest()->get(),
+        ]);
     }
 
     /**
@@ -28,7 +41,7 @@ class RepairController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all(), Auth::user()->id);
     }
 
     /**

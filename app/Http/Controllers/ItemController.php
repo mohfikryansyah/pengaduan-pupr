@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Routing\Controller;
 
 class ItemController extends Controller
 {

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Complaint;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,10 @@ class ComplaintStatusFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'complaint_id' => Complaint::factory(),
+            'status' => 'Belum diproses',
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }
